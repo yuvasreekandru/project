@@ -194,7 +194,7 @@
                        </p>
                    </a>
                </li>
-               {{-- <li class="nav-item">
+               <li class="nav-item">
                    <a href="{{ route('color.list') }}" class="nav-link @if (Request::segment(2) == 'color') active @endif">
 
                        <i class="nav-icon fas fa-list-alt"></i>
@@ -202,8 +202,8 @@
                            Color
                        </p>
                    </a>
-               </li> --}}
-               {{-- <li class="nav-item">
+               </li>
+               <li class="nav-item">
                    <a href="{{ route('product.list') }}" class="nav-link @if (Request::segment(2) == 'product') active @endif">
 
                        <i class="nav-icon fas fa-list-alt"></i>
@@ -211,7 +211,7 @@
                            Product
                        </p>
                    </a>
-               </li> --}}
+               </li>
                <li class="nav-item">
                    <a href="{{ route('admin.logout') }}" class="nav-link ">
 
