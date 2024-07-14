@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
+
 
 
 // Route::get('/', function () {
@@ -36,5 +38,14 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/category/edit/{id}', [CategoryController::class, 'edit']);
     Route::post('admin/category/edit/{id}', [CategoryController::class, 'update']);
     Route::get('admin/category/delete/{id}', [CategoryController::class, 'delete']);
+
+    //  ******** Sub Category *********** //
+    Route::get('admin/sub_category/list', [SubCategoryController::class, 'list'])->name('sub_category.list');
+    Route::get('admin/sub_category/add', [SubCategoryController::class, 'add'])->name('sub_category.add');
+    Route::post('admin/sub_category/add', [SubCategoryController::class, 'insert']);
+    Route::get('admin/sub_category/edit/{id}', [SubCategoryController::class, 'edit']);
+    Route::post('admin/sub_category/edit/{id}', [SubCategoryController::class, 'update']);
+    Route::get('admin/sub_category/delete/{id}', [SubCategoryController::class, 'delete']);
+    Route::post('admin/get_sub_category/', [SubCategoryController::class, 'get_sub_category']);
 
 });
