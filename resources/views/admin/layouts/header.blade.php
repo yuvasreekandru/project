@@ -185,7 +185,7 @@
                        </p>
                    </a>
                </li>
-               {{-- <li class="nav-item">
+               <li class="nav-item">
                    <a href="{{ route('brand.list') }}" class="nav-link @if (Request::segment(2) == 'brand') active @endif">
 
                        <i class="nav-icon fas fa-list-alt"></i>
@@ -193,7 +193,7 @@
                            Brand
                        </p>
                    </a>
-               </li> --}}
+               </li>
                {{-- <li class="nav-item">
                    <a href="{{ route('color.list') }}" class="nav-link @if (Request::segment(2) == 'color') active @endif">
 

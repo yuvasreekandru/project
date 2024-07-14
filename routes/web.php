@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\BrandController;
+
 
 
 
@@ -47,5 +49,13 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/sub_category/edit/{id}', [SubCategoryController::class, 'update']);
     Route::get('admin/sub_category/delete/{id}', [SubCategoryController::class, 'delete']);
     Route::post('admin/get_sub_category/', [SubCategoryController::class, 'get_sub_category']);
+
+    // ************ Brand ********** //
+    Route::get('admin/brand/list', [BrandController::class, 'list'])->name('brand.list');
+    Route::get('admin/brand/add', [BrandController::class, 'add'])->name('brand.add');
+    Route::post('admin/brand/add', [BrandController::class, 'insert']);
+    Route::get('admin/brand/edit/{id}', [BrandController::class, 'edit']);
+    Route::post('admin/brand/edit/{id}', [BrandController::class, 'update']);
+    Route::get('admin/brand/delete/{id}', [BrandController::class, 'delete']);
 
 });
