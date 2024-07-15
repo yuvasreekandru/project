@@ -89,4 +89,5 @@ class SubCategoryController extends Controller
         $json['html'] = $html;
         echo json_encode($json);
     }
+
 }

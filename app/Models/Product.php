@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Request;
 
 class Product extends Model
 {
@@ -40,15 +41,55 @@ class Product extends Model
             $return = $return->where('products.sub_category_id', '=', $subcategory_id);
         }
 
+        if(!empty(Request::get('sub_category_id')))
+        {
+            $sub_category_id = rtrim(Request::get('sub_category_id'),',');
+            $sub_category_id_array = explode(',', $sub_category_id);
+            $return = $return->whereIn('products.sub_category_id', $sub_category_id_array);
+        }
+        else
+        {
+            if (!empty(Request::get('old_category_id'))) {
+                $return = $return->where('products.category_id', '=', Request::get('old_category_id'));
+
+            }
+            if (!empty(Request::get('old_sub_category_id'))) {
+                $return = $return->where('products.sub_category_id', '=', Request::get('old_sub_category_id'));
+            }
+        }
+        if(!empty(Request::get('color_id')))
+        {
+            $color_id = rtrim(Request::get('color_id'),',');
+            $color_id_array = explode(',', $color_id);
+            $return = $return->join('product_colors', 'product_colors.product_id','=','products.id');
+
+            $return = $return->whereIn('product_colors.color_id', $color_id_array);
+        }
+        if(!empty(Request::get('brand_id')))
+        {
+            $brand_id = rtrim(Request::get('brand_id'),',');
+            $brand_id_array = explode(',', $brand_id);
+            $return = $return->whereIn('products.brand_id', $brand_id_array);
+        }
+        if(!empty(Request::get('start_price')) && !empty(Request::get('end_price')))
+        {
+            $start_price = str_replace('$','', Request::get('start_price'));
+            $end_price = str_replace('$','', Request::get('end_price'));
+
+            $return = $return->where('products.price','>=',$start_price);
+            $return = $return->where('products.price','<=',$end_price);
+
+
+        }
         $return = $return->where('products.is_delete', '=', 0)
             ->where('products.status', '=', 0)
+            ->groupBy('products.id')
             ->orderBy('products.id', 'desc')
-            ->paginate(30);
-
-        return $return;
+            ->paginate(2);
+            return $return;
     }
 
-    static public function getImageSingle($product_id)
+   static public function getImageSingle($product_id)
     {
         return ProductImage::where('product_id','=',$product_id)->orderBy('order_by','asc')->first();
     }

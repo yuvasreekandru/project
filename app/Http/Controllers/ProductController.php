@@ -6,17 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Product;
+use App\Models\Color;
+use App\Models\Brand;
+
+
 class ProductController extends Controller
 {
-
     public function getCategory($slug, $subslug = '')
     {
 
-        $getSubCategory = SubCategory::getSingleSlug($subslug);
         $getCategory = Category::getSingleSlug($slug);
+        $getSubCategory = SubCategory::getSingleSlug($subslug);
 
-        if(!empty($getCategory) && !empty($getSubCategory))
-        {
+        $data['getColor'] = Color::getRecordActive();
+        $data['getBrand'] = Brand::getRecordActive();
+
+
+        if (!empty($getCategory) && !empty($getSubCategory)) {
 
             $data['getCategory'] = $getCategory;
             $data['getSubCategory'] = $getSubCategory;
@@ -25,26 +31,90 @@ class ProductController extends Controller
             $data['meta_description'] = $getSubCategory->meta_description;
             $data['meta_keywords'] = $getSubCategory->meta_keywords;
 
-            $data['getProduct'] = Product::getProduct($getCategory->id , $getSubCategory->id);
+            $getProduct = Product::getProduct($getCategory->id, $getSubCategory->id);
 
-            return view("product.list",$data);
+            $page = 0;
+            if(!empty($getProduct->nextPageUrl() )) {
+                $parse_url = parse_url($getProduct->nextPageUrl());
+
+                if(!empty($parse_url['query']))
+                {
+                    parse_str($parse_url['query'], $get_array);
+                    $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+
+                }
+            }
+
+            $data['page'] = $page;
+
+            $data['getProduct'] =$getProduct;
+
+            $data['getSubCategoryFilter'] = SubCategory::getRecordSubCategory($getCategory->id);
+
+
+            return view("product.list", $data);
+
         }
+        else if(!empty($getCategory)) {
 
-        else if(!empty($getCategory))
-        {
+            $data['getSubCategoryFilter'] = SubCategory::getRecordSubCategory($getCategory->id);
+
             $data['getCategory'] = $getCategory;
 
             $data['meta_title'] = $getCategory->meta_title;
             $data['meta_description'] = $getCategory->meta_description;
             $data['meta_keywords'] = $getCategory->meta_keywords;
 
-            $data['getProduct'] = Product::getProduct($getCategory->id);
+            $getProduct = Product::getProduct($getCategory->id);
 
-            return view("product.list",$data);
+            $page = 0;
+            if(!empty($getProduct->nextPageUrl() )) {
+                $parse_url = parse_url($getProduct->nextPageUrl());
+
+                if(!empty($parse_url['query']))
+                {
+                    parse_str($parse_url['query'], $get_array);
+                    $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+
+                }
+            }
+
+            $data['page'] = $page;
+            $data['getProduct'] =$getProduct;
+
+            return view("product.list", $data);
+
         }
         else
         {
             abort(404);
         }
+
+    }
+
+    public function getFilterProductAjax(Request $req)
+    {
+        $getProduct = Product::getProduct();
+
+        $page = 0;
+        if(!empty($getProduct->nextPageUrl() )) {
+            $parse_url = parse_url($getProduct->nextPageUrl());
+
+            if(!empty($parse_url['query']))
+            {
+                parse_str($parse_url['query'], $get_array);
+                $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+
+            }
+        }
+
+        return response()->json([
+            "status" => true,
+            "page" => $page,
+            "success" => view("product._list",[
+                "getProduct" => $getProduct,
+            ])->render(),
+        ], 200);
+
     }
 }

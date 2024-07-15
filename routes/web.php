@@ -9,13 +9,10 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController as ProductFront;
 
 
-
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 // ******************************* Admin Side *******************************//
 
@@ -79,3 +76,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/product_image_sortable', [ProductController::class, 'product_image_sortable']);
 
 });
+
+
+// ******************************* Front Side ******************************* //
+
+Route::get('/', [HomeController::class, 'home']);
+
+Route::post('get_filter_product_ajax', [ProductFront::class, 'getFilterProductAjax']);
+Route::get('{category?}/{subcategpry?}', [ProductFront::class, 'getCategory']);
