@@ -21,8 +21,7 @@
                                     wishlist</span></a>
 
                         </div><!-- End .product-action-vertical -->
-
-
+                        
                     </figure><!-- End .product-media -->
 
                     <div class="product-body">

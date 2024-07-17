@@ -12,8 +12,43 @@ use App\Models\Brand;
 
 class ProductController extends Controller
 {
+
+    public function getProductSearch(Request $req)
+    {
+
+        $data['meta_title'] = '';
+        $data['meta_description'] = '';
+        $data['meta_keywords'] = '';
+
+        $getProduct = Product::getProduct();
+
+        $page = 0;
+        if(!empty($getProduct->nextPageUrl() )) {
+            $parse_url = parse_url($getProduct->nextPageUrl());
+
+            if(!empty($parse_url['query']))
+            {
+                parse_str($parse_url['query'], $get_array);
+                $page = !empty($get_array['page']) ? $get_array['page'] : 0;
+
+            }
+        }
+
+        $data['page'] = $page;
+
+        $data['getProduct'] =$getProduct;
+
+        $data['getColor'] = Color::getRecordActive();
+        $data['getBrand'] = Brand::getRecordActive();
+
+        return view("product.list", $data);
+
+
+    }
     public function getCategory($slug, $subslug = '')
     {
+
+        $getProductSingle = Product::getSingleSlug($slug);
 
         $getCategory = Category::getSingleSlug($slug);
         $getSubCategory = SubCategory::getSingleSlug($subslug);
@@ -21,8 +56,19 @@ class ProductController extends Controller
         $data['getColor'] = Color::getRecordActive();
         $data['getBrand'] = Brand::getRecordActive();
 
+        if(!empty($getProductSingle))
+        {
 
-        if (!empty($getCategory) && !empty($getSubCategory)) {
+            $data['meta_title'] = $getProductSingle->title;
+            $data['meta_description'] = $getProductSingle->short_description;
+
+            $data['getProduct'] =$getProductSingle;
+            $data['getRelatedProduct'] = Product::getRelatedProduct($getProductSingle->id, $getProductSingle->sub_category_id);
+
+            return view("product.details", $data);
+
+        }
+        else if (!empty($getCategory) && !empty($getSubCategory)) {
 
             $data['getCategory'] = $getCategory;
             $data['getSubCategory'] = $getSubCategory;
