@@ -149,7 +149,7 @@
                                                     alt="product">
                                             </a>
                                         </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i
+                                        <a href="{{ url('cart/delete/' . $header_cart->rowId) }}" class="btn-remove" title="Remove Product"><i
                                                 class="icon-close"></i></a>
                                     </div><!-- End .product -->
                                     @endif

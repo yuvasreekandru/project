@@ -11,8 +11,23 @@ class PaymentController extends Controller
 {
     public function cart(Request $req)
     {
-        dd(Cart::content());
-        // Cart::content();
+        $data['meta_title'] = 'Cart';
+        $data['meta_description'] = '';
+        $data['meta_keywords'] = '';
+
+        return view("payment.cart", $data);
+    }
+
+    public function cart_delete($rowId)
+    {
+
+       $cart =  Cart::content()->where('rowId', $rowId);
+        // dd($cart);
+        if(!empty($cart)){
+            Cart::remove($rowId);
+        }
+
+        return redirect()->back();
     }
     public function add_to_cart(Request $req)
     {
@@ -30,16 +45,6 @@ class PaymentController extends Controller
         }
 
         $color_id = !empty($req->color_id) ? $req->color_id : 0;
-        // Cart::add([
-        //     "id" => $getProduct->id,
-        //     "name" => "Product",
-        //     "price" => $total,
-        //     "quantity" => $req->qty,
-        //     "attributes" => array(
-        //         "size_id" => $size_id,
-        //         "color_id"=> $color_id,
-        //     )
-        // ]);
 
         Cart::add([
             'id' => $getProduct->id,
@@ -48,10 +53,10 @@ class PaymentController extends Controller
             'price' => $total,
             'options' => [
                 'size_id' => $size_id,
-                "color_id"=> $color_id,
-                ]]);
-        // dd($total);
-        // dd($req->all());
+                "color_id" => $color_id,
+            ]
+        ]);
+
         return redirect()->back();
     }
 }
