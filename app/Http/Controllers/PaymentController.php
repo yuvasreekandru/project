@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductSize;
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class PaymentController extends Controller
 {
     public function cart(Request $req)
     {
-        dd(Cart::getContent());
+        dd(Cart::content());
+        // Cart::content();
     }
     public function add_to_cart(Request $req)
     {
@@ -29,16 +30,26 @@ class PaymentController extends Controller
         }
 
         $color_id = !empty($req->color_id) ? $req->color_id : 0;
+        // Cart::add([
+        //     "id" => $getProduct->id,
+        //     "name" => "Product",
+        //     "price" => $total,
+        //     "quantity" => $req->qty,
+        //     "attributes" => array(
+        //         "size_id" => $size_id,
+        //         "color_id"=> $color_id,
+        //     )
+        // ]);
+
         Cart::add([
-            "id" => $getProduct->id,
-            "name" => "Product",
-            "price" => $total,
-            "quantity" => $req->qty,
-            "attributes" => array(
-                "size_id" => $size_id,
+            'id' => $getProduct->id,
+            'name' => 'Product',
+            'qty' => $req->qty,
+            'price' => $total,
+            'options' => [
+                'size_id' => $size_id,
                 "color_id"=> $color_id,
-            )
-        ]);
+                ]]);
         // dd($total);
         // dd($req->all());
         return redirect()->back();

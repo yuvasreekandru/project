@@ -121,7 +121,7 @@
                                         <label for="qty">Qty:</label>
                                         <div class="product-details-quantity">
                                             <input type="number" id="qty" class="form-control" value="1"
-                                                min="1" max="100" name="qty" required step="1"
+                                                min="1" max="100" name="qty" step="1"
                                                 data-decimals="0" required>
                                         </div><!-- End .product-details-quantity -->
                                     </div><!-- End .details-filter-row -->
