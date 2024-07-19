@@ -18,6 +18,20 @@ class PaymentController extends Controller
         return view("payment.cart", $data);
     }
 
+    public function update_cart(Request $req)
+    {
+        foreach($req->cart as $row)
+        {
+
+            Cart::update( $row['rowId'], array(
+               'qty' => $row['qty'],
+            ));
+
+        }
+        return redirect()->back();
+
+    }
+
     public function cart_delete($rowId)
     {
 
