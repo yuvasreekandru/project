@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductSize;
+use App\Models\DiscountCode;
+
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class PaymentController extends Controller
@@ -72,5 +74,47 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public function checkout(Request $req)
+    {
+        $data['meta_title'] = 'Checkout';
+        $data['meta_description'] = '';
+        $data['meta_keywords'] = '';
+
+        return view("payment.checkout",$data);
+    }
+
+    public function apply_discount_code(Request $req)
+    {
+        $getDiscount= DiscountCode::checkDiscount($req->discount_code);
+        // dd($getDiscount);
+        if(!empty($getDiscount))
+        {
+            $total = Cart::subtotal();
+            if($getDiscount->type == "Amount")
+            {
+                $discount_amount =  $getDiscount->percent_amount;
+                $payable_total = $total - $discount_amount;
+            }
+            else
+            {
+                $discount_amount = ($total * $getDiscount->percent_amount)/100;
+                $payable_total = $total - $discount_amount;
+
+            }
+            $json['status'] = true;
+            $json['discount_amount'] = number_format($discount_amount , 2);
+            $json['payable_total'] = number_format($payable_total , 2);
+
+            $json['message'] = "success";
+        }
+        else{
+            $json["status"] = false;
+            $json['discount_amount'] = "0.00";
+            $json['payable_total'] = number_format(Cart::subtotal());
+            $json["message"] = "Discount Code Invalid";
+        }
+        echo json_encode($json);
     }
 }
