@@ -147,21 +147,43 @@
                                                 <td>Discount:</td>
                                                 <td>$ <span id="getDiscountAmount">0.00</span></td>
                                             </tr>
-                                            <tr>
+                                            <tr class="summary-shipping">
                                                 <td>Shipping:</td>
-                                                <td>Free shipping</td>
+                                                <td>&nbsp;</td>
                                             </tr>
+                                            @foreach ($getShipping as $shipping)
+                                                <tr class="summary-shipping-row">
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="free-shipping{{ $shipping->id }}"
+                                                                name="shipping"
+                                                                data-price="{{ !empty($shipping->price) ? $shipping->price : 0 }}"
+                                                                class="custom-control-input getShippingCharge">
+                                                            <label class="custom-control-label"
+                                                                for="free-shipping{{ $shipping->id }}">{{ $shipping->name }}</label>
+                                                        </div><!-- End .custom-control -->
+                                                    </td>
+                                                    <td>
+                                                        @if (!empty($shipping->price))
+                                                            {{ number_format($shipping->price, 2) }}
+                                                        @endif
+                                                    </td>
+                                                </tr><!-- End .summary-shipping-row -->
+                                            @endforeach
 
                                             <tr class="summary-total">
-                                                <td>Total:</td>
+                                                <td> Total:</td>
                                                 <td>$ <span
                                                         id="getPayableTotal">{{ number_format(Cart::subtotal(), 2) }}</span>
                                                 </td>
+
                                             </tr><!-- End .summary-total -->
 
                                         </tbody>
                                     </table><!-- End .table table-summary -->
-
+                                    <input type="hidden" id="getShippingChargeTotal" value="0">
+                                    <input type="hidden" id="PayableTotal"
+                                        value="{{ number_format(Cart::subtotal(), 2) }}">
                                     <div class="accordion-summary" id="accordion-payment">
 
                                         <div class="card">
@@ -242,6 +264,13 @@
 
 @section('script')
     <script type="text/javascript">
+        $('body').delegate('.getShippingCharge', 'change', function() {
+            var price = $(this).attr('data-price');
+            var total = $('#PayableTotal').val();
+            $('#getShippingChargeTotal').val(price);
+            var final_total = parseFloat(price) + parseFloat(total);
+            $('#getPayableTotal').html(final_total.toFixed(2));
+        });
         $('body').delegate('#applyDiscount', 'click', function() {
             var discount_code = $('#getDiscountCode').val();
             $.ajax({
@@ -254,7 +283,11 @@
                 dataType: "json",
                 success: function(data) {
                     $('#getDiscountAmount').html(data.discount_amount);
-                    $('#getPayableTotal').html(data.payable_total);
+
+                    var shipping =  $('#getShippingChargeTotal').val();
+                    var final_total = parseFloat(shipping) + parseFloat(data.payable_total);
+                    $('#getPayableTotal').html(Number(final_total).toFixed(2));
+                    $('#PayableTotal').val(data.payable_total);
 
                     if (data.status == false) {
 
