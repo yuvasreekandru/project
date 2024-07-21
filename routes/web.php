@@ -121,6 +121,7 @@ Route::get('cart/delete/{rowId}', [PaymentController::class, 'cart_delete']);
 
 Route::get('checkout', [PaymentController::class, 'checkout']);
 Route::post('checkout/apply_discount_code', [PaymentController::class, 'apply_discount_code']);
+Route::post('checkout/place_order', [PaymentController::class, 'place_order']);
 
 
 Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
