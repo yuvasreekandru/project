@@ -104,6 +104,16 @@ Route::group(['middleware' => 'admin'], function () {
 // ******************************* Front Side ******************************* //
 
 Route::get('/', [HomeController::class, 'home']);
+Route::post('auth_register', [AuthController::class, 'auth_register']);
+Route::post('auth_login', [AuthController::class, 'auth_login']);
+Route::get('forgot_password', [AuthController::class, 'forgot_password']);
+Route::post('forgot_password', [AuthController::class, 'auth_forgot_password']);
+Route::get('reset/{token}', [AuthController::class, 'forgot_password_reset']);
+Route::post('reset/{token}', [AuthController::class, 'forgot_password_reset_confirm']);
+
+
+Route::get('activate/{id}', [AuthController::class, 'activate_email']);
+
 
 Route::get('cart', [PaymentController::class, 'cart']);
 Route::post('update_cart', [PaymentController::class, 'update_cart']);

@@ -70,17 +70,20 @@
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel"
                                     aria-labelledby="signin-tab">
-                                    <form action="#">
+
+                                    <form action="" id="submitFormLogin" method="POST">
+                                        @csrf
+                                        
                                         <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email"
-                                                name="singin-email" required>
+                                            <label for="singin-email">Email Address *</label>
+                                            <input type="text" class="form-control" id="singin-email" name="email"
+                                                required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="singin-password">Password *</label>
                                             <input type="password" class="form-control" id="singin-password"
-                                                name="singin-password" required>
+                                                name="password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -90,30 +93,39 @@
                                             </button>
 
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
+                                                <input type="checkbox" name="is_remember" class="custom-control-input"
                                                     id="signin-remember">
                                                 <label class="custom-control-label" for="signin-remember">Remember
                                                     Me</label>
                                             </div><!-- End .custom-checkbox -->
 
-                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                            <a href="{{ url('forgot_password') }}" class="forgot-link">Forgot Your
+                                                Password?</a>
                                         </div><!-- End .form-footer -->
                                     </form>
 
                                 </div><!-- .End .tab-pane -->
                                 <div class="tab-pane fade" id="register" role="tabpanel"
                                     aria-labelledby="register-tab">
-                                    <form action="#">
+                                    <form action="" id="submitFormRegister" method="POST">
+                                        @csrf
                                         <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
+                                            <label for="register-name">Name <span style="color:red;">*</span></label>
+                                            <input type="text" class="form-control" id="register-name"
+                                                name="name" required>
+                                        </div><!-- End .form-group -->
+                                        <div class="form-group">
+                                            <label for="register-email">Email address <span
+                                                    style="color:red;">*</span></label>
                                             <input type="email" class="form-control" id="register-email"
-                                                name="register-email" required>
+                                                name="email" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
-                                            <label for="register-password">Password *</label>
+                                            <label for="register-password">Password <span
+                                                    style="color:red;">*</span></label>
                                             <input type="password" class="form-control" id="register-password"
-                                                name="register-password" required>
+                                                name="password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -186,6 +198,50 @@
     <script src="{{ asset('molla/assets/js/main.js') }}"></script>
 
     @yield('script')
+
+    <script type="text/javascript">
+        // *************** Register **************** //
+        $('body').delegate('#submitFormRegister', 'submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('auth_register') }}",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    alert(data.message);
+                    if (data.status == true) {
+                        location.reload();
+                    }
+                },
+                error: function(data) {
+
+                }
+            });
+        });
+
+        // ***************** Login **************** //
+        $('body').delegate('#submitFormLogin', 'submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('auth_login') }}",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+
+                    if (data.status == true) {
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function(data) {
+
+                }
+            });
+        });
+    </script>
 </body>
 
 

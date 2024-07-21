@@ -31,7 +31,12 @@
                                     <span>(3)</span></a></li>
                             <li><a href="{{ url('about') }}">About Us</a></li>
                             <li><a href="{{ url('contact') }}">Contact Us</a></li>
-                            <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+                            @if (!empty(Auth::check()))
+                                <li><a href="{{ url('admin/logout') }}"><i class="icon-user"></i>Logout</a></li>
+                            @else
+                                <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+
+                            @endif
                         </ul>
                     </li>
                 </ul><!-- End .top-menu -->
