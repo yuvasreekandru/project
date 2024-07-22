@@ -78,16 +78,18 @@
 
                                 <label>Email address *</label>
                                 <input type="email" name="email" class="form-control" required>
-                                @if(empty(Auth::check()))
+                                @if (empty(Auth::check()))
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="is_create" class="custom-control-input createAccount"
                                             id="checkout-create-acc">
-                                        <label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
+                                        <label class="custom-control-label" for="checkout-create-acc">Create an
+                                            account?</label>
                                     </div><!-- End .custom-checkbox -->
 
                                     <div id="showPassword" style="display:none;">
                                         <label>Password *</label>
-                                        <input type="text" name="password" id="inputPassword" class="form-control" required>
+                                        <input type="text" name="password" id="inputPassword" class="form-control"
+                                            required>
 
                                     </div>
                                 @endif
@@ -246,14 +248,17 @@
                 type: "POST",
                 url: "{{ url('checkout/place_order') }}",
                 data: new FormData(this),
-                processData:false,
-                contentType:false,
+                processData: false,
+                contentType: false,
                 dataType: "json",
                 success: function(data) {
 
-                    if(data.status == false)
-                    {
+                    if (data.status == false) {
                         alert(data.message);
+                    }
+                    else
+                    {
+                        window.location.href = data.redirect;
                     }
                 },
                 error: function(data) {

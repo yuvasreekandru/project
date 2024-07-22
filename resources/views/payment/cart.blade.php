@@ -12,7 +12,7 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="url('/')">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Shop</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
                 </ol>
@@ -22,6 +22,9 @@
         <div class="page-content">
             <div class="cart">
                 <div class="container">
+
+                    @include('layouts.message')
+                    
                     @if (!empty(Cart::content()->count()))
                         <div class="row">
                             <div class="col-lg-9">
@@ -74,8 +77,12 @@
                                                                     min="1" max="10" step="1"
                                                                     data-decimals="0" required>
 
-                                                                    <input type="hidden" class="form-control" name="cart[{{ $key }}][id]" value="{{ $cart->id  }}">
-                                                                    <input type="hidden" class="form-control" name="cart[{{ $key }}][rowId]" value="{{ $cart->rowId }}">
+                                                                <input type="hidden" class="form-control"
+                                                                    name="cart[{{ $key }}][id]"
+                                                                    value="{{ $cart->id }}">
+                                                                <input type="hidden" class="form-control"
+                                                                    name="cart[{{ $key }}][rowId]"
+                                                                    value="{{ $cart->rowId }}">
 
                                                             </div><!-- End .cart-product-quantity -->
                                                         </td>
@@ -94,7 +101,7 @@
                                     </table><!-- End .table table-wishlist -->
 
                                     <div class="cart-bottom">
-                                        
+
                                         <button type="submit" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
                                                 class="icon-refresh"></i></button>
                                     </div><!-- End .cart-bottom -->
@@ -119,13 +126,13 @@
                                         </tbody>
                                     </table><!-- End .table table-summary -->
 
-                                    <a href="{{ url('checkout') }}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                                    <a href="{{ url('checkout') }}"
+                                        class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
                                         TO
                                         CHECKOUT</a>
                                 </div><!-- End .summary -->
 
-                                <a href="{{ url('/') }}"
-                                    class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
+                                <a href="{{ url('/') }}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
                                         SHOPPING</span><i class="icon-refresh"></i></a>
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
@@ -139,5 +146,4 @@
 @endsection
 
 @section('script')
-
 @endsection

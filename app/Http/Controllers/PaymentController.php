@@ -30,12 +30,12 @@ class PaymentController extends Controller
 
     public function update_cart(Request $req)
     {
-        foreach($req->cart as $row)
-        {
+        foreach ($req->cart as $row) {
 
-            Cart::update( $row['rowId'], array(
-               'qty' => $row['qty'],
-            ));
+            Cart::update($row['rowId'], array(
+                'qty' => $row['qty'],
+            )
+            );
 
         }
         return redirect()->back();
@@ -45,9 +45,9 @@ class PaymentController extends Controller
     public function cart_delete($rowId)
     {
 
-       $cart =  Cart::content()->where('rowId', $rowId);
+        $cart = Cart::content()->where('rowId', $rowId);
         // dd($cart);
-        if(!empty($cart)){
+        if (!empty($cart)) {
             Cart::remove($rowId);
         }
 
@@ -92,34 +92,29 @@ class PaymentController extends Controller
         $data['getShipping'] = ShippingCharge::getRecordActive();
 
 
-        return view("payment.checkout",$data);
+        return view("payment.checkout", $data);
     }
 
     public function apply_discount_code(Request $req)
     {
-        $getDiscount= DiscountCode::checkDiscount($req->discount_code);
+        $getDiscount = DiscountCode::checkDiscount($req->discount_code);
         // dd($getDiscount);
-        if(!empty($getDiscount))
-        {
+        if (!empty($getDiscount)) {
             $total = Cart::subtotal();
-            if($getDiscount->type == "Amount")
-            {
-                $discount_amount =  $getDiscount->percent_amount;
+            if ($getDiscount->type == "Amount") {
+                $discount_amount = $getDiscount->percent_amount;
                 $payable_total = $total - $getDiscount->percent_amount;
-            }
-            else
-            {
+            } else {
                 $discount_amount = ($total * $getDiscount->percent_amount) / 100;
                 $payable_total = $total - $discount_amount;
 
             }
             $json['status'] = true;
-            $json['discount_amount'] = number_format($discount_amount , 2);
+            $json['discount_amount'] = number_format($discount_amount, 2);
             $json['payable_total'] = $payable_total;
 
             $json['message'] = "success";
-        }
-        else{
+        } else {
             $json["status"] = false;
             $json['discount_amount'] = '0.00';
             $json['payable_total'] = Cart::subtotal();
@@ -133,27 +128,19 @@ class PaymentController extends Controller
         $message = '';
 
         // if auth already exist
-        if(!empty(Auth::check()))
-        {
+        if (!empty(Auth::check())) {
             $user_id = Auth::user()->id;
         }
         // auth not exist
-        else
-        {
-                // user directly create an account in checkout page
-            if(!empty($req->is_create))
-            {
-                // dd($request->is_create);
+        else {
+            // user directly create an account in checkout page
+            if (!empty($req->is_create)) {
                 $checkEmail = User::checkEmail($req->email);
 
-                if(!empty($checkEmail))
-                {
+                if (!empty($checkEmail)) {
                     $message = "This email already register please choose another";
                     $validate = 1;
-                }
-
-                else
-                {
+                } else {
                     $save = new User();
                     $save->name = trim($req->first_name);
                     $save->email = trim($req->email);
@@ -162,16 +149,13 @@ class PaymentController extends Controller
 
                     $user_id = $save->id;
                 }
-            }
-            else
-            {
+            } else {
                 $user_id = '';
             }
 
         }
 
-        if(empty($validate))
-        {
+        if (empty($validate)) {
 
             // if Discount code is Present following code is find the total amount after discount
             // (we already find the total after discount amount using ajax in checkout page but here we again doing because of avoiding hacking)
@@ -179,35 +163,29 @@ class PaymentController extends Controller
             $payable_total = Cart::subtotal();
             $discount_amount = 0;
             $discount_code = '';
-            if(!empty($req->discount_code))
-            {
-                $getDiscount = DiscountCode::checkDiscount( $req->discount_code );
+            if (!empty($req->discount_code)) {
+                $getDiscount = DiscountCode::checkDiscount($req->discount_code);
 
-                if(!empty($getDiscount))
-                {
+                if (!empty($getDiscount)) {
                     $discount_code = $req->discount_code;
-                    if($getDiscount->type == "Amount")
-                    {
-                        $discount_amount =  $getDiscount->percent_amount;
+                    if ($getDiscount->type == "Amount") {
+                        $discount_amount = $getDiscount->percent_amount;
                         $payable_total = $payable_total - $getDiscount->percent_amount;
-                    }
-                    else
-                    {
+                    } else {
                         $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
-                        $payable_total  = $payable_total - $discount_amount;
+                        $payable_total = $payable_total - $discount_amount;
 
                     }
                 }
             }
 
-            $shipping_amount = !empty($getShipping->price) ? $getShipping->price :0;
+            $shipping_amount = !empty($getShipping->price) ? $getShipping->price : 0;
             $total_amount = $payable_total + $shipping_amount;
 
             // orders saving in orders table
             $order = new Order;
 
-            if(!empty($user_id))
-            {
+            if (!empty($user_id)) {
                 $order->user_id = trim($user_id);
             }
             $order->first_name = trim($req->first_name);
@@ -232,8 +210,7 @@ class PaymentController extends Controller
             $order->save();
 
             // each item save in order_items table
-            foreach(Cart::content() as $key => $cart)
-            {
+            foreach (Cart::content() as $key => $cart) {
 
                 $order_item = new OrderItem();
                 $order_item->order_id = $order->id;
@@ -242,17 +219,15 @@ class PaymentController extends Controller
                 $order_item->price = $cart->price;
 
                 $color_id = $cart->options->color_id;
-                if(!empty($color_id))
-                {
+                if (!empty($color_id)) {
 
                     $getColor = Color::getSingle($color_id);
                     $order_item->color_name = $getColor->name;
                 }
 
-                $size_id =$cart->options->size_id;
+                $size_id = $cart->options->size_id;
 
-                if(!empty($size_id))
-                {
+                if (!empty($size_id)) {
                     $getSize = ProductSize::getSingle($size_id);
                     $order_item->size_name = $getSize->name;
                     $order_item->size_amount = $getSize->price;
@@ -263,15 +238,50 @@ class PaymentController extends Controller
                 $order_item->save();
 
             }
-            $json['status'] =true;
+            $json['status'] = true;
             $json['message'] = 'Order Success';
-        }
-        else
-        {
+            $json['redirect'] = url('checkout/payment?order_id=' . base64_encode($order->id));
+        } else {
             $json['status'] = false;
             $json['message'] = $message;
         }
 
         echo json_encode($json);
+    }
+
+    public function checkout_payment(Request $req)
+    {
+        if (!empty(Cart::subtotal()) && !empty($req->order_id)) {
+            $order_id = base64_decode($req->order_id);
+            $getOrder = Order::getSingle($order_id);
+            if (!empty($getOrder))
+            {
+                if(!empty($getOrder->payment_method == 'cash'))
+                {
+                    $getOrder->is_payment = 1;
+                    $getOrder->save();
+
+                    Cart::destroy();
+
+                    return redirect('cart')->with('success','Order successfully placed');
+                }
+                elseif(!empty($getOrder->payment_method == 'paypal'))
+                {
+
+                }
+                elseif(!empty($getOrder->payment_method == 'stripe'))
+                {
+
+                }
+            }
+            else
+            {
+                abort(404);
+            }
+        }
+        else
+        {
+            abort(404);
+        }
     }
 }
