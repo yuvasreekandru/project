@@ -23,7 +23,7 @@
             <div class="checkout">
                 <div class="container">
 
-                    <form action="{{ url('checkout/place_order') }}" method="POST">
+                    <form action="" id="submitForm" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-lg-9">
@@ -78,7 +78,19 @@
 
                                 <label>Email address *</label>
                                 <input type="email" name="email" class="form-control" required>
+                                @if(empty(Auth::check()))
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="is_create" class="custom-control-input createAccount"
+                                            id="checkout-create-acc">
+                                        <label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
+                                    </div><!-- End .custom-checkbox -->
 
+                                    <div id="showPassword" style="display:none;">
+                                        <label>Password *</label>
+                                        <input type="text" name="password" id="inputPassword" class="form-control" required>
+
+                                    </div>
+                                @endif
                                 <label>Order notes (optional)</label>
                                 <textarea class="form-control" name="note" cols="30" rows="4"
                                     placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
@@ -116,8 +128,8 @@
                                                     <div class="cart-discount">
 
                                                         <div class="input-group">
-                                                            <input type="text" id="getDiscountCode" name="discount_code" class="form-control"
-                                                                placeholder="Discount Code">
+                                                            <input type="text" id="getDiscountCode" name="discount_code"
+                                                                class="form-control" placeholder="Discount Code">
                                                             <div class="input-group-append">
 
                                                                 <button type="button" id="applyDiscount"
@@ -143,7 +155,8 @@
                                                     <td>
                                                         <div class="custom-control custom-radio">
                                                             <input type="radio" required
-                                                                id="free-shipping{{ $shipping->id }}" name="shipping" value="{{ $shipping->id }}"
+                                                                id="free-shipping{{ $shipping->id }}" name="shipping"
+                                                                value="{{ $shipping->id }}"
                                                                 data-price="{{ !empty($shipping->price) ? $shipping->price : 0 }}"
                                                                 class="custom-control-input getShippingCharge">
                                                             <label class="custom-control-label"
@@ -214,6 +227,44 @@
 
 @section('script')
     <script type="text/javascript">
+        $('body').delegate('.createAccount', 'change', function() {
+
+            if (this.checked) {
+                $('#showPassword').show();
+                $('#inputPassword').prop('required', true);
+            } else {
+                $('#showPassword').hide();
+                $('#inputPassword').prop('required', false);
+
+            }
+        });
+
+        $('body').delegate('#submitForm', 'submit', function(e) {
+
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('checkout/place_order') }}",
+                data: new FormData(this),
+                processData:false,
+                contentType:false,
+                dataType: "json",
+                success: function(data) {
+
+                    if(data.status == false)
+                    {
+                        alert(data.message);
+                    }
+                },
+                error: function(data) {
+
+                }
+            });
+
+
+        });
+
+
         $('body').delegate('.getShippingCharge', 'change', function() {
             var price = $(this).attr('data-price');
             var total = $('#PayableTotal').val();

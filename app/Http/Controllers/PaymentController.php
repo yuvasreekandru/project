@@ -7,12 +7,15 @@ use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\DiscountCode;
 use App\Models\ShippingCharge;
+use App\Models\User;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\OrderItem;
 
 
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Hash;
+use Auth;
 
 class PaymentController extends Controller
 {
@@ -126,89 +129,149 @@ class PaymentController extends Controller
     }
     public function place_order(Request $req)
     {
+        $validate = 0;
+        $message = '';
 
-        $getShipping = ShippingCharge::getSingle($req->shipping);
-        $payable_total = Cart::subtotal();
-        $discount_amount = 0;
-        $discount_code = '';
-        if(!empty($req->discount_code))
+        // if auth already exist
+        if(!empty(Auth::check()))
         {
-            $getDiscount = DiscountCode::checkDiscount( $req->discount_code );
-
-            if(!empty($getDiscount))
+            $user_id = Auth::user()->id;
+        }
+        // auth not exist
+        else
+        {
+                // user directly create an account in checkout page
+            if(!empty($req->is_create))
             {
-                $discount_code = $req->discount_code;
-                if($getDiscount->type == "Amount")
+                // dd($request->is_create);
+                $checkEmail = User::checkEmail($req->email);
+
+                if(!empty($checkEmail))
                 {
-                    $discount_amount =  $getDiscount->percent_amount;
-                    $payable_total = $payable_total - $getDiscount->percent_amount;
+                    $message = "This email already register please choose another";
+                    $validate = 1;
                 }
+
                 else
                 {
-                    $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
-                    $payable_total  = $payable_total - $discount_amount;
+                    $save = new User();
+                    $save->name = trim($req->first_name);
+                    $save->email = trim($req->email);
+                    $save->password = Hash::make($req->password);
+                    $save->save();
 
+                    $user_id = $save->id;
                 }
             }
+            else
+            {
+                $user_id = '';
+            }
+
         }
 
-        $shipping_amount = !empty($getShipping->price) ? $getShipping->price :0;
-        $total_amount = $payable_total + $shipping_amount;
-
-        $order = new Order();
-        $order->first_name = trim($req->first_name);
-        $order->last_name = trim($req->last_name);
-        $order->company_name = trim($req->company_name);
-        $order->country = trim($req->country);
-        $order->address_one = trim($req->address_one);
-        $order->address_two = trim($req->address_two);
-        $order->city = trim($req->city);
-        $order->state = trim($req->state);
-        $order->postcode = trim($req->postcode);
-        $order->phone = trim($req->phone);
-        $order->email = trim($req->email);
-        $order->note = trim($req->note);
-        $order->discount_amount = trim($discount_amount);
-        $order->discount_code = trim($discount_code);
-        $order->shipping_id = trim($req->shipping);
-        $order->shipping_amount = trim($shipping_amount);
-        $order->total_amount = trim($total_amount);
-        $order->payment_method = trim($req->payment_method);
-
-        // dd($order);
-        $order->save();
-
-        foreach(Cart::content() as $key => $cart)
+        if(empty($validate))
         {
 
-            $order_item = new OrderItem();
-            $order_item->order_id = $order->id;
-            $order_item->product_id = $cart->id;
-            $order_item->quantity = $cart->qty;
-            $order_item->price = $cart->price;
-
-            $color_id = $cart->options->color_id;
-            if(!empty($color_id))
+            // if Discount code is Present following code is find the total amount after discount
+            // (we already find the total after discount amount using ajax in checkout page but here we again doing because of avoiding hacking)
+            $getShipping = ShippingCharge::getSingle($req->shipping);
+            $payable_total = Cart::subtotal();
+            $discount_amount = 0;
+            $discount_code = '';
+            if(!empty($req->discount_code))
             {
+                $getDiscount = DiscountCode::checkDiscount( $req->discount_code );
 
-                $getColor = Color::getSingle($color_id);
-                $order_item->color_name = $getColor->name;
+                if(!empty($getDiscount))
+                {
+                    $discount_code = $req->discount_code;
+                    if($getDiscount->type == "Amount")
+                    {
+                        $discount_amount =  $getDiscount->percent_amount;
+                        $payable_total = $payable_total - $getDiscount->percent_amount;
+                    }
+                    else
+                    {
+                        $discount_amount = ($payable_total * $getDiscount->percent_amount) / 100;
+                        $payable_total  = $payable_total - $discount_amount;
+
+                    }
+                }
             }
 
-            $size_id =$cart->options->size_id;
+            $shipping_amount = !empty($getShipping->price) ? $getShipping->price :0;
+            $total_amount = $payable_total + $shipping_amount;
 
-            if(!empty($size_id))
+            // orders saving in orders table
+            $order = new Order;
+
+            if(!empty($user_id))
             {
-                $getSize = ProductSize::getSingle($size_id);
-                $order_item->size_name = $getSize->name;
-                $order_item->size_amount = $getSize->price;
+                $order->user_id = trim($user_id);
+            }
+            $order->first_name = trim($req->first_name);
+            $order->last_name = trim($req->last_name);
+            $order->company_name = trim($req->company_name);
+            $order->country = trim($req->country);
+            $order->address_one = trim($req->address_one);
+            $order->address_two = trim($req->address_two);
+            $order->city = trim($req->city);
+            $order->state = trim($req->state);
+            $order->postcode = trim($req->postcode);
+            $order->phone = trim($req->phone);
+            $order->email = trim($req->email);
+            $order->note = trim($req->note);
+            $order->discount_amount = trim($discount_amount);
+            $order->discount_code = trim($discount_code);
+            $order->shipping_id = trim($req->shipping);
+            $order->shipping_amount = trim($shipping_amount);
+            $order->total_amount = trim($total_amount);
+            $order->payment_method = trim($req->payment_method);
+
+            $order->save();
+
+            // each item save in order_items table
+            foreach(Cart::content() as $key => $cart)
+            {
+
+                $order_item = new OrderItem();
+                $order_item->order_id = $order->id;
+                $order_item->product_id = $cart->id;
+                $order_item->quantity = $cart->qty;
+                $order_item->price = $cart->price;
+
+                $color_id = $cart->options->color_id;
+                if(!empty($color_id))
+                {
+
+                    $getColor = Color::getSingle($color_id);
+                    $order_item->color_name = $getColor->name;
+                }
+
+                $size_id =$cart->options->size_id;
+
+                if(!empty($size_id))
+                {
+                    $getSize = ProductSize::getSingle($size_id);
+                    $order_item->size_name = $getSize->name;
+                    $order_item->size_amount = $getSize->price;
+
+                }
+
+                $order_item->total_price = $cart->price;
+                $order_item->save();
 
             }
-
-            $order_item->total_price = $cart->price;
-            $order_item->save();
-
+            $json['status'] =true;
+            $json['message'] = 'Order Success';
         }
-        die;
+        else
+        {
+            $json['status'] = false;
+            $json['message'] = $message;
+        }
+
+        echo json_encode($json);
     }
 }
