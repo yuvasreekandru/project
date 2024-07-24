@@ -12,6 +12,7 @@ use App\Models\Color;
 use App\Models\Order;
 use App\Models\OrderItem;
 
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Hash;
@@ -46,7 +47,6 @@ class PaymentController extends Controller
     {
 
         $cart = Cart::content()->where('rowId', $rowId);
-        // dd($cart);
         if (!empty($cart)) {
             Cart::remove($rowId);
         }
@@ -267,6 +267,44 @@ class PaymentController extends Controller
                 }
                 elseif(!empty($getOrder->payment_method == 'paypal'))
                 {
+                    $provider = new PayPalClient;
+                    $provider->setApiCredentials(config('paypal'));
+                    $paypalToken = $provider->getAccessToken();
+
+                    $response = $provider->createOrder([
+                        "intent" => "CAPTURE",
+                        "application_context" => [
+
+                            "return_url" => url('paypal/success_payment'),
+                            "cancel_url" => url('checkout'),
+                        ],
+                        "purchase_units" => [
+
+                            0 => [
+                                "reference_id" => $getOrder->id,
+                                "amount" => [
+
+                                    "currency_code" => "USD",
+                                    "value" => $getOrder->total_amount
+                                ],
+
+                            ]
+                                ],
+                    ]);
+                    // dd($response);
+                    if (isset($response['id']) && $response['id'] != null)
+                    {
+                        // redirect to approve href
+                        foreach ($response['links'] as $links) {
+
+                            if ($links['rel'] == 'approve') {
+                                return redirect()->away($links['href']);
+
+                            }
+
+                        }
+
+                    }
 
                 }
                 elseif(!empty($getOrder->payment_method == 'stripe'))
@@ -278,6 +316,38 @@ class PaymentController extends Controller
             {
                 abort(404);
             }
+        }
+        else
+        {
+            abort(404);
+        }
+    }
+
+    public function paypal_success_payment(Request $req)
+    {
+
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+        $response = $provider->capturePaymentOrder($req['token']);
+
+        if (isset($response['status']) && $response['status'] == 'COMPLETED') {
+            $getOrder = Order::getSingle($response['purchase_units'][0]['reference_id']);
+            if(!empty($getOrder))
+            {
+                $getOrder->is_payment = 1;
+                $getOrder->transaction_id = $response['id'];
+                $getOrder->payment_data = json_encode($response);
+                $getOrder->save();
+
+                Cart::destroy();
+                return redirect('cart')->with('success', "Order successfully placed");
+            }
+            else
+            {
+                abort(404);
+            }
+
         }
         else
         {
