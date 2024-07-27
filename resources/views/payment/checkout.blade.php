@@ -89,7 +89,7 @@
                                     <div id="showPassword" style="display:none;">
                                         <label>Password *</label>
                                         <input type="text" name="password" id="inputPassword" class="form-control"
-                                            required>
+                                           >
 
                                     </div>
                                 @endif
@@ -289,7 +289,6 @@
                 dataType: "json",
                 success: function(data) {
                     $('#getDiscountAmount').html(data.discount_amount);
-
                     var shipping = $('#getShippingChargeTotal').val();
                     var final_total = parseFloat(shipping) + parseFloat(data.payable_total);
                     $('#getPayableTotal').html(Number(final_total).toFixed(2));
