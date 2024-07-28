@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ShippingChargeController;
+use App\Http\Controllers\Admin\Ordercontroller;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController as ProductFront;
@@ -89,7 +90,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/discount_code/edit/{id}', [DiscountController::class, 'update']);
     Route::get('admin/discount_code/delete/{id}', [DiscountController::class, 'delete']);
 
-    // ************ Discount Code ********** //
+    // ************ Shipping Charge ********** //
     Route::get('admin/shipping_charge/list', [ShippingChargeController::class, 'list'])->name('shipping_charge.list');
     Route::get('admin/shipping_charge/add', [ShippingChargeController::class, 'add'])->name('shipping_charge.add');
     Route::post('admin/shipping_charge/add', [ShippingChargeController::class, 'insert']);
@@ -97,6 +98,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/shipping_charge/edit/{id}', [ShippingChargeController::class, 'update']);
     Route::get('admin/shipping_charge/delete/{id}', [ShippingChargeController::class, 'delete']);
 
+    // ************  Orders ********** //
+    Route::get('admin/orders/list', [OrderController::class, 'list'])->name('orders.list');
+    Route::get('admin/orders/details/{id}', [OrderController::class, 'order_details']);
+    // Route::post('admin/orders/edit/{id}', [OrderController::class, 'update']);
+    // Route::get('admin/orders/delete/{id}', [OrderController::class, 'delete']);
 
 });
 
