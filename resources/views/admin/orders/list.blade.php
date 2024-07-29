@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Orders List</h1>
+                        <h1>Orders List (Total : {{ $getRecord->total() }})</h1>
                     </div>
 
                 </div>
@@ -23,6 +23,111 @@
                 <div class="row">
                     <div class="col-md-12">
                         @include('admin.layouts.message')
+
+                        <form action="" method="GET">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Order Search</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Id</label>
+                                                <input type="text" name="id" class="form-control" placeholder="Id"
+                                                    value="{{ Request::get('id') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Company Name</label>
+                                                <input type="text" name="company_name" class="form-control"
+                                                    placeholder="Company Name" value="{{ Request::get('company_name') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>First Name</label>
+                                                <input type="text" name="first_name" class="form-control"
+                                                    placeholder="First Name" value="{{ Request::get('first_name') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Last Name</label>
+                                                <input type="text" name="last_name" class="form-control"
+                                                    placeholder="Last Name" value="{{ Request::get('last_name') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <input type="text" name="email" class="form-control"
+                                                    placeholder="Email" value="{{ Request::get('email') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Country</label>
+                                                <input type="text" name="country"
+                                                    class="form-control"placeholder="Country"
+                                                    value="{{ Request::get('country') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>State</label>
+                                                <input type="text" name="state" class="form-control"placeholder="State"
+                                                    value="{{ Request::get('state') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>City</label>
+                                                <input type="text" name="city" class="form-control"placeholder="City"
+                                                    value="{{ Request::get('city') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Phone</label>
+                                                <input type="text" name="phone" class="form-control"placeholder="Phone"
+                                                    value="{{ Request::get('phone') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Postcode</label>
+                                                <input type="text" name="postcode"
+                                                    class="form-control"placeholder="Postcode"
+                                                    value="{{ Request::get('postcode') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>From Date</label>
+                                                <input type="date" style="padding: 6px;" name="from_date"
+                                                    class="form-control" value="{{ Request::get('from_date') }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>To Date</label>
+                                                <input type="date" style="padding: 6px;" name="to_date"
+                                                    class="form-control" value="{{ Request::get('to_date') }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary">Search</button>
+                                            <a href="{{ url('admin/orders/list') }}" class="btn btn-primary">Reset</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Orders List</h3>
@@ -57,9 +162,9 @@
                                             <tr>
                                                 <td>{{ $value->id }}</td>
                                                 <td>{{ $value->first_name }} {{ $value->last_name }}</td>
-                                                <td>{{ $value->company }}</td>
+                                                <td>{{ $value->company_name }}</td>
                                                 <td>{{ $value->country }}</td>
-                                                <td>{{ $value->address_one }}<br/>{{ $value->address_two }}</td>
+                                                <td>{{ $value->address_one }}<br />{{ $value->address_two }}</td>
                                                 <td>{{ $value->city }}</td>
                                                 <td>{{ $value->state }}</td>
                                                 <td>{{ $value->postcode }}</td>
@@ -71,7 +176,7 @@
                                                 <td>{{ number_format($value->total_amount, 2) }}</td>
                                                 <td>{{ $value->payment_method }}</td>
                                                 <td>{{ $value->status }}</td>
-                                                <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
+                                                <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/orders/details/' . $value->id) }}"
                                                         class="btn btn-primary">Details</a>
