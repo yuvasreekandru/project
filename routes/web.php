@@ -39,6 +39,8 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/admin/edit/{id}', [AdminController::class, 'update']);
     Route::get('admin/admin/delete/{id}', [AdminController::class, 'delete']);
 
+    Route::get('admin/customer/list', [AdminController::class, 'customer_list'])->name('customer.list');
+
     //  ******** Category *********** //
     Route::get('admin/category/list', [CategoryController::class, 'list'])->name('category.list');
     Route::get('admin/category/add', [CategoryController::class, 'add'])->name('category.add');

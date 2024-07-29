@@ -81,6 +81,5 @@
 @endsection
 
 @section('script')
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('AdminLTE/dist/js/pages/dashboard3.js') }}"></script>
+    
 @endsection

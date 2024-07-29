@@ -168,6 +168,15 @@
                    </a>
                </li>
                <li class="nav-item">
+                <a href="{{ route('customer.list') }}" class="nav-link @if (Request::segment(2) == 'customer') active @endif">
+
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                        Customer
+                    </p>
+                </a>
+            </li>
+               <li class="nav-item">
                 <a href="{{ route('orders.list') }}" class="nav-link @if (Request::segment(2) == 'orders') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
