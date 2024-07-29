@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -35,7 +34,7 @@ return new class extends Migration
             $table->string('shipping_amount')->default(0);
             $table->string('total_amount')->default(0);
             $table->string('payment_method')->nullable();
-            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('status')->default(0)->comment('0:pending, 1:inprogress, 2:delivered, 3:completed, 4:cancelled');
             $table->tinyInteger('is_delete')->default(0);
             $table->tinyInteger('is_payment')->default(0);
             $table->text('payment_data')->nullable();

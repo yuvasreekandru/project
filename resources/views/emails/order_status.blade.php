@@ -66,7 +66,21 @@
         }
     </style>
     Hi <b>{{ $order->first_name }}</b>,
+    <p>
+        Order Status:
+        @if ($order->status == 0)
+        Pending
+        @elseif($order->status == 1)
+        In Progress
+        @elseif ($order->status == 2)
+        Delivered
+        @elseif ($order->status == 3)
+        Completed
+        @elseif ($order->status == 4)
+        Cancelled
+        @endif
 
+    </p>
     <div class="container">
         <div class="header">
             <img src="https://example.com/logo.png" alt="Company Logo">
@@ -77,6 +91,8 @@
             <h2>Order Details</h2>
             <p><strong>Order Number:</strong> {{ $order->order_number }}</p>
             <p><strong>Order Date:</strong> {{ $order->created_at }}</p>
+            {{-- <p><strong>Customer Name:</strong> {{$order->first_name}} {{$order->last_name}}</p>
+            <p><strong>Shipping Address:</strong> {{$order->address_one}}{{$order->address_two}}</p> --}}
         </div>
 
         <table class="table">

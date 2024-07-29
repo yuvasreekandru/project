@@ -138,6 +138,7 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>
+                                            <th>Order Number</th>
                                             <th>Name</th>
                                             <th>Company</th>
                                             <th>Country</th>
@@ -161,6 +162,7 @@
                                         @foreach ($getRecord as $value)
                                             <tr>
                                                 <td>{{ $value->id }}</td>
+                                                <td>{{ $value->order_number }}</td>
                                                 <td>{{ $value->first_name }} {{ $value->last_name }}</td>
                                                 <td>{{ $value->company_name }}</td>
                                                 <td>{{ $value->country }}</td>
@@ -174,8 +176,22 @@
                                                 <td>{{ number_format($value->discount_amount, 2) }}</td>
                                                 <td>{{ number_format($value->shipping_amount, 2) }}</td>
                                                 <td>{{ number_format($value->total_amount, 2) }}</td>
-                                                <td>{{ $value->payment_method }}</td>
-                                                <td>{{ $value->status }}</td>
+                                                <td style="text-transform: capitalize;">{{ $value->payment_method }}</td>
+                                                <td>
+                                                    <select class="form-control changeStatus" id="{{ $value->id }}"
+                                                        style="width:150px;" name="" id="">
+                                                        <option {{ $value->status == 0 ? 'selected' : '' }}
+                                                            value="0">Pending</option>
+                                                        <option {{ $value->status == 1 ? 'selected' : '' }}
+                                                            value="1">InProgress</option>
+                                                        <option {{ $value->status == 2 ? 'selected' : '' }}
+                                                            value="2">Delivered</option>
+                                                        <option {{ $value->status == 3 ? 'selected' : '' }}
+                                                            value="3">Completed</option>
+                                                        <option {{ $value->status == 4 ? 'selected' : '' }}
+                                                            value="4">Cancelled</option>
+                                                    </select>
+                                                </td>
                                                 <td>{{ date('m-d-Y', strtotime($value->created_at)) }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/orders/details/' . $value->id) }}"
@@ -205,6 +221,22 @@
 @endsection
 
 @section('script')
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('AdminLTE/dist/js/pages/dashboard3.js') }}"></script>
+    <script type="text/javascript">
+        $('body').delegate('.changeStatus', 'change', function() {
+            var status = $(this).val();
+            var order_id = $(this).attr('id');
+            $.ajax({
+                type: "GET",
+                url: "{{ url('admin/order_status') }}",
+                data: {
+                    status: status,
+                    order_id: order_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    alert(data.message);
+                }
+            });
+        });
+    </script>
 @endsection
