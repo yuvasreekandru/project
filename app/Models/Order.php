@@ -15,6 +15,67 @@ class Order extends Model
     {
         return self::find($id);
     }
+    static public function getTotalOrder()
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->count();
+    }
+    static public function getTotalTodayOrder()
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->whereDate('created_at', '=', date('Y-m-d'))
+            ->count();
+    }
+    static public function getTotalOrderMonth($start_date, $end_date)
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)
+
+            ->count();
+    }
+    static public function getTotalOrderAmountMonth($start_date, $end_date)
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)
+            ->sum('total_amount');
+    }
+    static public function getTotalAmount()
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->sum('total_amount');
+    }
+    static public function getTotalTodayAmount()
+    {
+        return self::select('id')
+            ->where('is_payment', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->whereDate('created_at', '=', date('Y-m-d'))
+            ->sum('total_amount');
+    }
+    static public function getLatestOrders()
+    {
+        $return = Order::select('orders.*')
+            ->where('is_payment', '=', '1')
+            ->where('is_delete', '=', '0')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get();
+
+        return $return;
+    }
+
     static public function getRecord()
     {
         $return = Order::select('orders.*');
@@ -48,13 +109,11 @@ class Order extends Model
         if (!empty(Request::get('postcode'))) {
             $return = $return->where('postcode', 'like', '%' . Request::get('postcode') . '%');
         }
-        if(!empty(Request::get('from_date')))
-        {
-            $return = $return->whereDate('created_at','>=', Request::get('from_date'));
+        if (!empty(Request::get('from_date'))) {
+            $return = $return->whereDate('created_at', '>=', Request::get('from_date'));
         }
-        if(!empty(Request::get('to_date')))
-        {
-            $return = $return->whereDate('created_at','<=', Request::get('to_date'));
+        if (!empty(Request::get('to_date'))) {
+            $return = $return->whereDate('created_at', '<=', Request::get('to_date'));
         }
 
         $return = $return->where('is_payment', '=', '1')
