@@ -31,53 +31,54 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>First Name *</label>
-                                        <input type="text" name="first_name" class="form-control" required>
+                                        <input type="text" name="name" value="{{ !empty(Auth::user()->name) ? Auth::user()->name : ''}}"
+                                            class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
 
                                     <div class="col-sm-6">
                                         <label>Last Name *</label>
-                                        <input type="text" name="last_name" class="form-control" required>
+                                        <input type="text" name="last_name" value="{{ !empty(Auth::user()->last_name) ? Auth::user()->last_name : ''}}" class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
                                 </div><!-- End .row -->
 
                                 <label>Company Name (Optional)</label>
-                                <input type="text" name="company_name" class="form-control">
+                                <input type="text" name="company_name" value="{{ !empty(Auth::user()->company_name) ? Auth::user()->company_name : ''}}" class="form-control">
 
                                 <label>Country *</label>
-                                <input type="text" name="country" class="form-control" required>
+                                <input type="text" name="country" value="{{ !empty(Auth::user()->country) ? Auth::user()->country : ''}}" class="form-control" required>
 
                                 <label>Street address *</label>
-                                <input type="text" name="address_one" class="form-control"
+                                <input type="text" name="address_one" value="{{ !empty(Auth::user()->address_one) ? Auth::user()->address_one : ''}}" class="form-control"
                                     placeholder="House number and Street name" required>
-                                <input type="text" name="address_two" class="form-control"
+                                <input type="text" name="address_two" value="{{ !empty(Auth::user()->address_two) ? Auth::user()->address_two : ''}}" class="form-control"
                                     placeholder="Appartments, suite, unit etc ..." required>
 
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>Town / City *</label>
-                                        <input type="text" name="city" class="form-control" required>
+                                        <input type="text" name="city" value="{{ !empty(Auth::user()->city) ? Auth::user()->city : ''}}" class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
 
                                     <div class="col-sm-6">
                                         <label>State *</label>
-                                        <input type="text" name="state" class="form-control" required>
+                                        <input type="text" name="state" value="{{ !empty(Auth::user()->state) ? Auth::user()->state : ''}}" class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
                                 </div><!-- End .row -->
 
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>Postcode / ZIP *</label>
-                                        <input type="text" name="postcode" class="form-control" required>
+                                        <input type="text" name="postcode" value="{{ !empty(Auth::user()->postcode) ? Auth::user()->postcode : ''}}" class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
 
                                     <div class="col-sm-6">
                                         <label>Phone *</label>
-                                        <input type="tel" name="phone" class="form-control" required>
+                                        <input type="tel" name="phone" value="{{ !empty(Auth::user()->phone) ? Auth::user()->phone : ''}}" class="form-control" required>
                                     </div><!-- End .col-sm-6 -->
                                 </div><!-- End .row -->
 
                                 <label>Email address *</label>
-                                <input type="email" name="email" class="form-control" required>
+                                <input type="email" name="email" value="{{ !empty(Auth::user()->email) ? Auth::user()->email : ''}}" class="form-control" required>
                                 @if (empty(Auth::check()))
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="is_create" class="custom-control-input createAccount"
@@ -88,8 +89,7 @@
 
                                     <div id="showPassword" style="display:none;">
                                         <label>Password *</label>
-                                        <input type="text" name="password" id="inputPassword" class="form-control"
-                                           >
+                                        <input type="text" name="password" id="inputPassword" class="form-control">
 
                                     </div>
                                 @endif
@@ -255,9 +255,7 @@
 
                     if (data.status == false) {
                         alert(data.message);
-                    }
-                    else
-                    {
+                    } else {
                         window.location.href = data.redirect;
                     }
                 },

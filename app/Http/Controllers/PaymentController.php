@@ -240,7 +240,7 @@ class PaymentController extends Controller
 
                 }
 
-                $order_item->total_price = $cart->price;
+                $order_item->total_price = $cart->price * $cart->qty;
                 $order_item->save();
 
             }

@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
 @section('style')
-    .form-group {
+<style type="text/css">
+ .form-group {
     margin-bottom: 5px;
     }
+</style>
+
 @endsection
 
 @section('content')
@@ -96,8 +99,21 @@
                                             style="font-weight: normal; text-transform:capitalize;">{{ $getRecord->payment_method }}</span></label>
                                 </div>
                                 <div class="form-group">
-                                    <label>Status : <span
-                                            style="font-weight: normal;">{{ $getRecord->status }}</span></label>
+                                    <label>Status :
+                                        <span style="font-weight: normal;">
+                                        @if ($getRecord->status == 0)
+                                        Pending
+                                        @elseif($getRecord->status == 1)
+                                        In Progress
+                                        @elseif ($getRecord->status == 2)
+                                        Delivered
+                                        @elseif ($getRecord->status == 3)
+                                        Completed
+                                        @elseif ($getRecord->status == 4)
+                                        Cancelled
+                                        @endif
+                                    </span>
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label>Note : <span style="font-weight: normal;">{{ $getRecord->note }}</span></label>

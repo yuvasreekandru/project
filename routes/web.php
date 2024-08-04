@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Ordercontroller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController as ProductFront;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 
 
 
@@ -26,7 +27,6 @@ use App\Http\Controllers\PaymentController;
 Route::get('admin', [AuthController::class, 'login_admin']);
 Route::post('admin', [AuthController::class, 'auth_login_admin']);
 Route::get('admin/logout', [AuthController::class, 'logout_admin'])->name('admin.logout');
-
 
 Route::group(['middleware' => 'admin'], function () {
 
@@ -112,6 +112,21 @@ Route::group(['middleware' => 'admin'], function () {
 
 // ******************************* Front Side ******************************* //
 
+// *********** User ********* //
+Route::group(['middleware' => 'user'], function () {
+    Route::get('user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('user/orders', [UserController::class, 'orders'])->name('user.orders');
+    Route::get('user/orders/details/{id}', [UserController::class, 'order_details']);
+    Route::get('user/edit-profile', [UserController::class, 'edit_profile']);
+    Route::post('user/edit-profile', [UserController::class, 'update_profile']);
+
+    Route::get('user/change-password', [UserController::class, 'change_password']);
+    Route::post('user/change-password', [UserController::class, 'update_password']);
+
+
+});
+
+// ************* Home ********* //
 Route::get('/', [HomeController::class, 'home']);
 Route::post('auth_register', [AuthController::class, 'auth_register']);
 Route::post('auth_login', [AuthController::class, 'auth_login']);
@@ -123,7 +138,7 @@ Route::post('reset/{token}', [AuthController::class, 'forgot_password_reset_conf
 
 Route::get('activate/{id}', [AuthController::class, 'activate_email']);
 
-
+// ********** Cart, Checkout and Payment *********** //
 Route::get('cart', [PaymentController::class, 'cart']);
 Route::post('update_cart', [PaymentController::class, 'update_cart']);
 Route::get('cart/delete/{rowId}', [PaymentController::class, 'cart_delete']);
@@ -134,7 +149,6 @@ Route::post('checkout/place_order', [PaymentController::class, 'place_order']);
 Route::get('checkout/payment', [PaymentController::class, 'checkout_payment']);
 Route::get('paypal/success_payment', [PaymentController::class, 'paypal_success_payment']);
 Route::get('stripe/payment_success', [PaymentController::class, 'stripe_success_payment']);
-
 
 Route::post('product/add-to-cart', [PaymentController::class, 'add_to_cart']);
 
