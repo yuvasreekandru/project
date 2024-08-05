@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Request;
-
+use Auth;
 class Product extends Model
 {
     use HasFactory;
@@ -26,6 +26,21 @@ class Product extends Model
 
     }
 
+    static public function getMyWishlist($user_id)
+    {
+        $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
+        ->join('users', 'users.id', '=', 'products.created_by')
+        ->join('categories', 'categories.id', '=', 'products.category_id')
+        ->join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->join('product_wishlists', 'product_wishlists.product_id', '=', 'products.id')
+        ->where('product_wishlists.user_id', '=', $user_id)
+        ->where('products.is_delete', '=', 0)
+        ->where('products.status', '=', 0)
+        ->groupBy('products.id')
+        ->orderBy('products.id', 'desc')
+        ->paginate(10);
+    return $return;
+    }
     static public function getProduct($category_id = '', $subcategory_id = '')
     {
         $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
@@ -119,7 +134,10 @@ class Product extends Model
     {
         return self::where("slug", "=", $slug)->count();
     }
-
+    static public function checkWishlist($product_id)
+    {
+        return ProductWishlist::checkAlready($product_id, Auth::user()->id);
+    }
     public function getColor()
     {
         return $this->hasMany(ProductColor::class, "product_id");

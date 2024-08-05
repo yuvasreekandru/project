@@ -8,15 +8,25 @@ use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\Color;
 use App\Models\Brand;
+use Auth;
 
 
 class ProductController extends Controller
 {
 
+    public function my_wishlist()
+    {
+        $data['meta_title'] = 'My Wishlist';
+        $data['meta_description'] = '';
+        $data['meta_keywords'] = '';
+        $data['getProduct'] = Product::getMyWishlist(Auth::user()->id);
+
+        return view("product.my-wishlist", $data);
+    }
     public function getProductSearch(Request $req)
     {
 
-        $data['meta_title'] = '';
+        $data['meta_title'] = 'Search';
         $data['meta_description'] = '';
         $data['meta_keywords'] = '';
 

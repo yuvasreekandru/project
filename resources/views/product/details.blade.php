@@ -76,7 +76,7 @@
                                 </div><!-- End .product-content -->
                                 <form action="{{ url('product/add-to-cart') }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="product_id" value="{{$getProduct->id}}">
+                                    <input type="hidden" name="product_id" value="{{ $getProduct->id }}">
                                     @if (!empty($getProduct->getColor->count()))
                                         <div class="details-filter-row details-row-size">
                                             <label for="size">Color:</label>
@@ -130,10 +130,17 @@
                                         <button type="submit" style="background: #fff;color:#c96;"
                                             class="btn-product btn-cart">add to cart</button>
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
-                                                    Wishlist</span></a>
-                                            {{-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to
-                                                    Compare</span></a> --}}
+                                            @if (!empty(Auth::check()))
+                                                <a href="javascript:;" class="add_to_wishlist add-to-wishlist{{ $getProduct->id }}
+                                                    {{!empty($getProduct->checkWishlist($getProduct->id)) ? 'btn-wishlist-add' : '' }} btn-product btn-wishlist"
+                                                    title="Wishlist" id={{ $getProduct->id }}><span>Add to
+                                                        Wishlist</span></a>
+                                            @else
+                                                <a href="#signin-modal" data-toggle="modal" class="btn-product btn-wishlist"
+                                                    title="Wishlist"><span>Add to
+                                                        Wishlist</span></a>
+                                            @endif
+
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
                                 </form>
@@ -331,9 +338,20 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable">
-                                        <span>add to wishlist</span>
-                                    </a>
+                                    @if (!empty(Auth::check()))
+
+                                        <a href="javascript:;" class="btn-product-icon btn-wishlist btn-expandable
+                                        add_to_wishlist add-to-wishlist{{ $value->id }}
+                                        {{!empty($value->checkWishlist($value->id)) ? 'btn-wishlist-add' : '' }}"
+                                        title="Wishlist" id={{ $value->id }}><span>add to wishlist
+                                            </span></a>
+                                    @else
+                                        <a href="#signin-modal" data-toggle="modal" class="btn-product-icon btn-wishlist btn-expandable"
+                                            title="Wishlist"><span>add to wishlist </span>
+                                        </a>
+
+                                    @endif
+                                    
                                 </div><!-- End .product-action-vertical -->
 
                             </figure><!-- End .product-media -->

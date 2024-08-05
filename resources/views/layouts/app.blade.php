@@ -25,6 +25,12 @@
     <link rel="stylesheet" href="{{ asset('molla/assets/css/style.css') }}">
 
     @yield('style')
+
+    <style type="text/css">
+        .btn-wishlist-add::before {
+            content: '\f233' !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -73,7 +79,7 @@
 
                                     <form action="" id="submitFormLogin" method="POST">
                                         @csrf
-                                        
+
                                         <div class="form-group">
                                             <label for="singin-email">Email Address *</label>
                                             <input type="text" class="form-control" id="singin-email" name="email"
@@ -234,6 +240,35 @@
                         location.reload();
                     } else {
                         alert(data.message);
+                    }
+                },
+                error: function(data) {
+
+                }
+            });
+        });
+        // **************** Add to Wishlist ********* //
+
+        $('body').delegate('.add_to_wishlist', 'click', function(e) {
+
+            var product_id = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url: "{{ url('add_to_wishlist') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    product_id: product_id,
+                },
+                dataType: "json",
+                success: function(data) {
+                    if(data.is_wishlist == 0)
+                    {
+                        $('.add-to-wishlist'+product_id).removeClass('btn-wishlist-add');
+                    }
+                    else
+                    {
+                        $('.add-to-wishlist'+product_id).addClass('btn-wishlist-add');
+
                     }
                 },
                 error: function(data) {

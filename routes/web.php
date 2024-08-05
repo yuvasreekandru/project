@@ -123,6 +123,10 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('user/change-password', [UserController::class, 'change_password']);
     Route::post('user/change-password', [UserController::class, 'update_password']);
 
+    Route::post('add_to_wishlist', [UserController::class, 'add_to_wishlist']);
+
+    Route::get('my-wishlist', [ProductFront::class, 'my_wishlist']);
+
 
 });
 

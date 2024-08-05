@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\ProductWishlist;
+
 use Auth;
 use Hash;
 
@@ -111,5 +113,29 @@ class UserController extends Controller
         {
             return redirect()->back()->with("error","Old password is not correct");
         }
+    }
+
+    public function add_to_wishlist(Request $req)
+    {
+        $check = ProductWishlist::checkAlready($req->product_id, Auth::user()->id);
+        if(empty($check))
+        {
+            $save = new ProductWishlist();
+            $save->product_id = $req->product_id;
+            $save->user_id = Auth::user()->id;
+            $save->save();
+
+            $json['is_wishlist'] = 1;
+        }
+        else
+        {
+            ProductWishlist::deleteRecord($req->product_id, Auth::user()->id);
+
+            $json['is_wishlist'] = 0;
+
+        }
+
+        $json['status'] = true;
+        echo json_encode($json);
     }
 }
