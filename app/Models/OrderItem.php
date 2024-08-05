@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Auth;
 class OrderItem extends Model
 {
     use HasFactory;
@@ -14,5 +14,11 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class, "product_id");
     }
+
+    static public function getReview($product_id, $order_id)
+    {
+        return ProductReview::getReview($product_id, $order_id, Auth::user()->id);
+    }
+
 
 }

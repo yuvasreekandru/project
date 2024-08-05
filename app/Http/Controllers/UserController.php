@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\ProductWishlist;
+use App\Models\ProductReview;
+
 
 use Auth;
 use Hash;
@@ -137,5 +139,19 @@ class UserController extends Controller
 
         $json['status'] = true;
         echo json_encode($json);
+    }
+
+    public function submit_review(Request $req)
+    {
+        $save = new ProductReview();
+        $save->product_id = trim($req->product_id);
+        $save->order_id = trim($req->order_id);
+        $save->user_id = Auth::user()->id;
+        $save->rating = trim($req->rating);
+        $save->review = trim($req->review);
+        $save->save();
+
+        return redirect()->back()->with('success','Thank you for your review');
+
     }
 }
