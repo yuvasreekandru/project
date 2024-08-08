@@ -6,12 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\SystemSetting;
+use App\Models\ContactUs;
+
 
 use Str;
 
 
 class PagesController extends Controller
 {
+    public function contactUsList()
+    {
+        $data['getRecord'] = ContactUs::getRecord();
+        $data['header_title'] = "Contact Us";
+        return view("admin.contact-us.list", $data);
+    }
+    public function contact_delete($id)
+    {
+        ContactUs::where('id','=', $id)->delete();
+
+        return redirect()->back()->with('success',"Record successfully deleted");
+    }
     public function list()
     {
         $data['getRecord'] = Page::getRecord();
