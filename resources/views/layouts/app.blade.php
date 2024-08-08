@@ -15,8 +15,13 @@
     @if (!empty($meta_description))
         <meta name="description" content="{{ $meta_description }}">
     @endif
+    @php
+        $getSystemSettingApp = App\Models\SystemSetting::getSingle();
+    @endphp
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('molla/assets/images/icons/favicon.ico') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('molla/assets/images/icons/favicon.ico') }}"> --}}
+    <link rel="shortcut icon" href="{{ $getSystemSettingApp->getFavicon() }}">
+
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="{{ asset('molla/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('molla/assets/css/plugins/owl-carousel/owl.carousel.css') }}">

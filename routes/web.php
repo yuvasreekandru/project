@@ -12,11 +12,13 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ShippingChargeController;
 use App\Http\Controllers\Admin\Ordercontroller;
+use App\Http\Controllers\Admin\PagesController;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController as ProductFront;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+
 
 
 
@@ -103,9 +105,16 @@ Route::group(['middleware' => 'admin'], function () {
     // ************  Orders ********** //
     Route::get('admin/orders/list', [OrderController::class, 'list'])->name('orders.list');
     Route::get('admin/orders/details/{id}', [OrderController::class, 'order_details']);
-    // Route::post('admin/orders/edit/{id}', [OrderController::class, 'update']);
-    // Route::get('admin/orders/delete/{id}', [OrderController::class, 'delete']);
     Route::get('admin/order_status', [OrderController::class, 'order_status']);
+
+
+    // *********** Pages *****************//
+    Route::get('admin/pages/list', [PagesController::class, 'list'])->name('pages.list');
+    Route::get('admin/pages/edit/{id}', [PagesController::class, 'edit']);
+    Route::post('admin/pages/edit/{id}', [PagesController::class, 'update']);
+
+    Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
+    Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
 
 });
 
@@ -133,6 +142,20 @@ Route::group(['middleware' => 'user'], function () {
 
 // ************* Home ********* //
 Route::get('/', [HomeController::class, 'home']);
+
+Route::get('contact', [HomeController::class, 'contact']);
+Route::post('contact', [HomeController::class, 'submit_contact']);
+
+Route::get('about', [HomeController::class, 'about']);
+Route::get('faq', [HomeController::class, 'faq']);
+Route::get('payment-method', [HomeController::class, 'payment_method']);
+Route::get('money-back-guarantee', [HomeController::class, 'money_back_guarantee']);
+Route::get('returns', [HomeController::class, 'returns']);
+Route::get('shipping', [HomeController::class, 'shipping']);
+Route::get('terms-conditions', [HomeController::class, 'terms_conditions']);
+Route::get('privacy-policy', [HomeController::class, 'privacy_policy']);
+
+
 Route::post('auth_register', [AuthController::class, 'auth_register']);
 Route::post('auth_login', [AuthController::class, 'auth_login']);
 Route::get('forgot_password', [AuthController::class, 'forgot_password']);

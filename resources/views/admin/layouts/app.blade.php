@@ -14,6 +14,9 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('AdminLTE/dist/css/adminlte.min.css')}}">
 
+<!-- summernote -->
+<link rel="stylesheet" href="{{ asset('AdminLTE/plugins/summernote/summernote-bs4.min.css') }}">
+
   @yield('style')
 </head>
 <!--
@@ -52,6 +55,10 @@
 <script src="{{asset('AdminLTE/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('AdminLTE/dist/js/pages/dashboard3.js')}}"></script>
+
+<!-- Summernote -->
+<script src="{{ asset('AdminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
+
 
 @yield('script')
 </body>

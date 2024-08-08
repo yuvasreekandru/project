@@ -249,6 +249,24 @@
                 </a>
                </li>
                <li class="nav-item">
+                <a href="{{ route('pages.list') }}" class="nav-link @if (Request::segment(2) == 'pages') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Pages
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        System Settings
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
                    <a href="{{ route('admin.logout') }}" class="nav-link ">
 
                        <i class="nav-icon fas fa-sign-out-alt"></i>
