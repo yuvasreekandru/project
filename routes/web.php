@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ShippingChargeController;
 use App\Http\Controllers\Admin\Ordercontroller;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\PartnerController;
 
 
 use App\Http\Controllers\HomeController;
@@ -117,18 +118,28 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
     Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
-
-     // ************ Slider ********** //
-     Route::get('admin/slider/list', [SliderController::class, 'list'])->name('slider.list');
-     Route::get('admin/slider/add', [SliderController::class, 'add'])->name('slider.add');
-     Route::post('admin/slider/add', [SliderController::class, 'insert']);
-     Route::get('admin/slider/edit/{id}', [SliderController::class, 'edit']);
-     Route::post('admin/slider/edit/{id}', [SliderController::class, 'update']);
-     Route::get('admin/slider/delete/{id}', [SliderController::class, 'delete']);
-
+    
     // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
     Route::get('admin/contact-us/delete/{id}', [PagesController::class, 'contact_delete']);
+
+    // ************ Slider ********** //
+    Route::get('admin/slider/list', [SliderController::class, 'list'])->name('slider.list');
+    Route::get('admin/slider/add', [SliderController::class, 'add'])->name('slider.add');
+    Route::post('admin/slider/add', [SliderController::class, 'insert']);
+    Route::get('admin/slider/edit/{id}', [SliderController::class, 'edit']);
+    Route::post('admin/slider/edit/{id}', [SliderController::class, 'update']);
+    Route::get('admin/slider/delete/{id}', [SliderController::class, 'delete']);
+
+    // ************ Partner ********** //
+    Route::get('admin/partner/list', [PartnerController::class, 'list'])->name('partner.list');
+    Route::get('admin/partner/add', [PartnerController::class, 'add'])->name('partner.add');
+    Route::post('admin/partner/add', [PartnerController::class, 'insert']);
+    Route::get('admin/partner/edit/{id}', [PartnerController::class, 'edit']);
+    Route::post('admin/partner/edit/{id}', [PartnerController::class, 'update']);
+    Route::get('admin/partner/delete/{id}', [PartnerController::class, 'delete']);
+
+
 
 
 });

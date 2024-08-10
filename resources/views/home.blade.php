@@ -16,62 +16,30 @@
                                         }
                                     }
                                 }'>
-                                <div class="intro-slide">
-                                    <figure class="slide-image">
-                                        <picture>
-                                            <source media="(max-width: 480px)" srcset="assets/images/slider/slide-1-480w.jpg">
-                                            <img src="{{asset('molla/assets/images/slider/slide-1.jpg')}}" alt="Image Desc">
-                                        </picture>
-                                    </figure><!-- End .slide-image -->
+                                @foreach ($getSlider as $slider)
+                                    @if (!empty($slider->getImage()))
+                                        <div class="intro-slide">
+                                            <figure class="slide-image">
+                                                <picture>
+                                                    <source media="(max-width: 480px)" srcset="{{ $slider->getImage() }}">
+                                                    <img src="{{ $slider->getImage() }}" alt="Image Desc">
+                                                </picture>
+                                            </figure><!-- End .slide-image -->
 
-                                    <div class="intro-content">
-                                        <h3 class="intro-subtitle">Topsale Collection</h3><!-- End .h3 intro-subtitle -->
-                                        <h1 class="intro-title">Living Room<br>Furniture</h1><!-- End .intro-title -->
+                                            <div class="intro-content">
+                                                <h1 class="intro-title">{!! $slider->title !!}</h1><!-- End .intro-title -->
 
-                                        <a href="category.html" class="btn btn-outline-white">
-                                            <span>SHOP NOW</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </a>
-                                    </div><!-- End .intro-content -->
-                                </div><!-- End .intro-slide -->
+                                                @if (!empty($slider->button_link) && !empty($slider->button_name))
+                                                    <a href="{{ $slider->button_link }}" class="btn btn-outline-white">
+                                                        <span>{{ $slider->button_name }}</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </a>
+                                                @endif
+                                            </div><!-- End .intro-content -->
+                                        </div><!-- End .intro-slide -->
+                                    @endif
+                                @endforeach
 
-                                <div class="intro-slide">
-                                    <figure class="slide-image">
-                                        <picture>
-                                            <source media="(max-width: 480px)" srcset="assets/images/slider/slide-2-480w.jpg">
-                                            <img src="{{asset('molla/assets/images/slider/slide-2.jpg')}}" alt="Image Desc">
-                                        </picture>
-                                    </figure><!-- End .slide-image -->
-
-                                    <div class="intro-content">
-                                        <h3 class="intro-subtitle">News and Inspiration</h3><!-- End .h3 intro-subtitle -->
-                                        <h1 class="intro-title">New Arrivals</h1><!-- End .intro-title -->
-
-                                        <a href="category.html" class="btn btn-outline-white">
-                                            <span>SHOP NOW</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </a>
-                                    </div><!-- End .intro-content -->
-                                </div><!-- End .intro-slide -->
-
-                                <div class="intro-slide">
-                                    <figure class="slide-image">
-                                        <picture>
-                                            <source media="(max-width: 480px)" srcset="assets/images/slider/slide-3-480w.jpg">
-                                            <img src="{{asset('molla/assets/images/slider/slide-3.jpg')}}" alt="Image Desc">
-                                        </picture>
-                                    </figure><!-- End .slide-image -->
-
-                                    <div class="intro-content">
-                                        <h3 class="intro-subtitle">Outdoor Furniture</h3><!-- End .h3 intro-subtitle -->
-                                        <h1 class="intro-title">Outdoor Dining <br>Furniture</h1><!-- End .intro-title -->
-
-                                        <a href="category.html" class="btn btn-outline-white">
-                                            <span>SHOP NOW</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </a>
-                                    </div><!-- End .intro-content -->
-                                </div><!-- End .intro-slide -->
                             </div><!-- End .intro-slider owl-carousel owl-simple -->
 
                             <span class="slider-loader"></span><!-- End .slider-loader -->
@@ -114,7 +82,8 @@
 
                 <div class="mb-6"></div><!-- End .mb-6 -->
 
-                <div class="owl-carousel owl-simple" data-toggle="owl"
+                @if (!empty($getPartner->count()))
+                    <div class="owl-carousel owl-simple" data-toggle="owl"
                     data-owl-options='{
                         "nav": false,
                         "dots": false,
@@ -138,30 +107,16 @@
                             }
                         }
                     }'>
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/1.png')}}" alt="Brand Name">
-                    </a>
+                        @foreach ($getPartner as $partner)
+                            @if (!empty($partner->getImage()))
+                                <a href="{{!empty($partner->button_link) ? $partner->button_link : '#'}}" class="brand">
+                                    <img src="{{ $partner->getImage() }}" alt="Brand Name">
+                                </a>
+                            @endif
+                        @endforeach
 
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/2.png')}}" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/3.png')}}" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/4.png')}}" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/5.png')}}" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="{{asset('molla/assets/images/brands/6.png')}}" alt="Brand Name">
-                    </a>
-                </div><!-- End .owl-carousel -->
+                    </div><!-- End .owl-carousel -->
+                @endif
             </div><!-- End .container -->
         </div><!-- End .bg-lighter -->
 

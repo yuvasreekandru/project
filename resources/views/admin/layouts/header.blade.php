@@ -276,6 +276,15 @@
                 </a>
                </li>
                <li class="nav-item">
+                <a href="{{ route('partner.list') }}" class="nav-link @if (Request::segment(2) == 'partner') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Partner Logo
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
                 <a href="{{ route('contactUs.list') }}" class="nav-link @if (Request::segment(2) == 'contact-us') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>

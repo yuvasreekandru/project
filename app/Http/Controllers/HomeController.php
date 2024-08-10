@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SystemSetting;
 use App\Models\ContactUs;
+use App\Models\Page;
+use App\Models\Slider;
+use App\Models\Partner;
+
 use App\Mail\ContactUsMail;
 use Session;
 use Auth;
@@ -13,15 +17,26 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $data['meta_title'] = 'Ecommerce';
-        $data['meta_description'] = '';
-        $data['meta_keywords'] = '';
+        $getPage = Page::getSlug('home');
+        $data['getPage'] = $getPage;
+
+        $data['getSlider'] = Slider::getRecordActive();
+        $data['getPartner'] = Partner::getRecordActive();
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
 
         return view("home", $data);
     }
     public function contact()
     {
+        $getPage = Page::getSlug('contact');
+        $data['getPage'] = $getPage;
 
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
         $first_number = mt_rand(0,9);
         $second_number = mt_rand(0,9);
 
@@ -29,10 +44,6 @@ class HomeController extends Controller
         $data['second_number'] = $second_number;
 
         Session::put('total_sum', $first_number + $second_number);
-
-        $data['meta_title'] = 'Contact';
-        $data['meta_description'] = '';
-        $data['meta_keywords'] = '';
         $data['getSystemSetting'] = SystemSetting::getSingle();
         return view("pages.contact", $data);
     }
@@ -76,44 +87,89 @@ class HomeController extends Controller
 
     public function about()
     {
-        $data['meta_title'] = 'About';
-        $data['meta_description'] = '';
-        $data['meta_keywords'] = '';
+        $getPage = Page::getSlug('about');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
         return view("pages.about", $data);
     }
     public function faq()
     {
-        return view("pages.faq");
+        $getPage = Page::getSlug('faq');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.faq", $data);
 
     }
     public function payment_method()
     {
-        return view("pages.payment-method");
+        $getPage = Page::getSlug('payment-method');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.payment-method", $data);
 
     }
     public function money_back_guarantee()
     {
-        return view("pages.money-back-guarantee");
+        $getPage = Page::getSlug('money-back-guarantee');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.money-back-guarantee", $data);
 
     }
     public function returns()
     {
-        return view("pages.returns");
+        $getPage = Page::getSlug('returns');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.returns", $data);
 
     }
     public function shipping()
     {
-        return view("pages.shipping");
+        $getPage = Page::getSlug('shipping');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.shipping", $data);
 
     }
     public function terms_conditions()
     {
-        return view("pages.terms-conditions");
+        $getPage = Page::getSlug('terms-conditions');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.terms-conditions", $data);
 
     }
     public function privacy_policy()
     {
-        return view("pages.privacy-policy");
+        $getPage = Page::getSlug('privacy-policy');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+        return view("pages.privacy-policy", $data);
 
     }
 }
