@@ -10,10 +10,10 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Shipping Charge List</h1>
+                        <h1>Slider List</h1>
                     </div>
                     <div class="col-sm-6" style="text-align: right;">
-                        <a href="{{ route('shipping_charge.add') }}" class="btn btn-primary">Add New Shipping Charge</a>
+                        <a href="{{ route('slider.add') }}" class="btn btn-primary">Add New Slider</a>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -27,7 +27,7 @@
                         @include('admin.layouts.message')
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Shipping Charge List</h3>
+                                <h3 class="card-title">Slider List</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body p-0">
@@ -35,8 +35,10 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>
-                                            <th>Name</th>
-                                            <th>Price</th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Button Name</th>
+                                            <th>Button Link</th>
                                             <th>Status</th>
                                             <th>Created Date</th>
                                             <th>Action</th>
@@ -47,13 +49,21 @@
                                         @foreach ($getRecord as $value)
                                             <tr>
                                                 <td>{{ $value->id }}</td>
-                                                <td>{{ $value->name }}</td>
-                                                <td>{{ $value->price }}</td>
-                                                <td>{{ ($value->status == 0) ? 'Active' : 'InActive'}}</td>
+                                                <td>
+                                                    @if (!empty($value->getImage()))
+                                                        <img src="{{ $value->getImage() }}" height="100px" alt="">
+                                                    @endif
+                                                </td>
+                                                <td>{{ $value->title }}</td>
+                                                <td>{{ $value->button_name }}</td>
+                                                <td>{{ $value->button_link }}</td>
+                                                <td>{{ $value->status == 0 ? 'Active' : 'InActive' }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
                                                 <td>
-                                                    <a href="{{ url('admin/shipping_charge/edit/'.$value->id) }}" class="btn btn-primary">Edit</a>
-                                                    <a href="{{ url('admin/shipping_charge/delete/'.$value->id) }}" class="btn btn-danger">Delete</a>
+                                                    <a href="{{ url('admin/slider/edit/' . $value->id) }}"
+                                                        class="btn btn-primary">Edit</a>
+                                                    <a href="{{ url('admin/slider/delete/' . $value->id) }}"
+                                                        class="btn btn-danger">Delete</a>
 
                                                 </td>
 

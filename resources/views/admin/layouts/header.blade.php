@@ -267,6 +267,15 @@
                 </a>
                </li>
                <li class="nav-item">
+                <a href="{{ route('slider.list') }}" class="nav-link @if (Request::segment(2) == 'slider') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Slider
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
                 <a href="{{ route('contactUs.list') }}" class="nav-link @if (Request::segment(2) == 'contact-us') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>

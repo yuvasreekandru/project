@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ShippingChargeController;
 use App\Http\Controllers\Admin\Ordercontroller;
 use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\Admin\SliderController;
+
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController as ProductFront;
@@ -115,6 +117,14 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
     Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
+
+     // ************ Slider ********** //
+     Route::get('admin/slider/list', [SliderController::class, 'list'])->name('slider.list');
+     Route::get('admin/slider/add', [SliderController::class, 'add'])->name('slider.add');
+     Route::post('admin/slider/add', [SliderController::class, 'insert']);
+     Route::get('admin/slider/edit/{id}', [SliderController::class, 'edit']);
+     Route::post('admin/slider/edit/{id}', [SliderController::class, 'update']);
+     Route::get('admin/slider/delete/{id}', [SliderController::class, 'delete']);
 
     // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
