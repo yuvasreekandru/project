@@ -21,6 +21,10 @@ return new class extends Migration
             $table->integer('created_by')->nullable();
             $table->tinyinteger('status')->default(0)->comment('0:active, 1:inactive');
             $table->tinyinteger('is_delete')->default(0)->comment('0:not, 1:deleted');
+            $table->string('image_name')->nullable();
+            $table->string('button_name')->nullable();
+            $table->tinyinteger('is_home')->default(0)->comment('0:active, 1:inactive');
+
             $table->timestamps();
         });
     }

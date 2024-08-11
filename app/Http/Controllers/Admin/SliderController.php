@@ -23,10 +23,10 @@ class SliderController extends Controller
     public function insert(Request $req)
     {
 
-        $Slider = new Slider();
-        $Slider->title = trim($req->title);
-        $Slider->button_name = trim($req->button_name);
-        $Slider->button_link = trim($req->button_link);
+        $slider = new Slider();
+        $slider->title = trim($req->title);
+        $slider->button_name = trim($req->button_name);
+        $slider->button_link = trim($req->button_link);
 
         $file = $req->file('image_name');
         $ext = $file->getClientOriginalExtension();
@@ -34,10 +34,10 @@ class SliderController extends Controller
         $filename = strtolower($randomStr) .'.'. $ext;
         $file->move('upload/sliders/', $filename);
 
-        $Slider->image_name = trim($filename);
-        $Slider->status = trim($req->status);
+        $slider->image_name = trim($filename);
+        $slider->status = trim($req->status);
 
-        $Slider->save();
+        $slider->save();
         return redirect('admin/slider/list')->with("success", "Slider successfully created");
     }
 
@@ -51,10 +51,10 @@ class SliderController extends Controller
     public function update($id, Request $req)
     {
 
-        $Slider = Slider::getSingle($id);
-        $Slider->title = trim($req->title);
-        $Slider->button_name = trim($req->button_name);
-        $Slider->button_link = trim($req->button_link);
+        $slider = Slider::getSingle($id);
+        $slider->title = trim($req->title);
+        $slider->button_name = trim($req->button_name);
+        $slider->button_link = trim($req->button_link);
 
         if(!empty($req->file('image_name')))
         {
@@ -64,19 +64,19 @@ class SliderController extends Controller
             $filename = strtolower($randomStr) .'.'. $ext;
             $file->move('upload/sliders/', $filename);
 
-            $Slider->image_name = trim($filename);
+            $slider->image_name = trim($filename);
         }
 
-        $Slider->status = trim($req->status);
-        $Slider->save();
+        $slider->status = trim($req->status);
+        $slider->save();
 
         return redirect('admin/slider/list')->with("success", "Slider successfully updated");
     }
     public function delete($id)
     {
-        $Slider = Slider::getSingle($id);
-        $Slider->is_delete = 1;
-        $Slider->save();
+        $slider = Slider::getSingle($id);
+        $slider->is_delete = 1;
+        $slider->save();
         return redirect()->back()->with("success", "Slider successfully deleted");
     }
 }

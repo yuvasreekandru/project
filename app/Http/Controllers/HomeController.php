@@ -8,6 +8,8 @@ use App\Models\ContactUs;
 use App\Models\Page;
 use App\Models\Slider;
 use App\Models\Partner;
+use App\Models\Category;
+
 
 use App\Mail\ContactUsMail;
 use Session;
@@ -22,6 +24,7 @@ class HomeController extends Controller
 
         $data['getSlider'] = Slider::getRecordActive();
         $data['getPartner'] = Partner::getRecordActive();
+        $data['getCategory'] = Category::getRecordActiveHome();
 
         $data['meta_title'] = $getPage->meta_title;
         $data['meta_description'] = $getPage->meta_description;

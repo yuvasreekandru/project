@@ -38,6 +38,16 @@ class Category extends Model
             ->orderBy('categories.name', 'asc')
             ->get();
     }
+    static public function getRecordActiveHome()
+    {
+        return self::select('categories.*')
+            ->join('users', 'users.id', '=', 'categories.created_by')
+            ->where('categories.is_delete', '=', 0)
+            ->where('categories.is_home', '=', 1)
+            ->where('categories.status', '=', 0)
+            ->orderBy('categories.id', 'asc')
+            ->get();
+    }
     static public function getRecordMenu()
     {
         return self::select('categories.*')
@@ -52,5 +62,17 @@ class Category extends Model
         return $this->hasMany(SubCategory::class, "category_id")
             ->where('sub_categories.status', '=', 0)
             ->where('sub_categories.is_delete', '=', 0);
+    }
+    public function getImage()
+    {
+        if(!empty($this->image_name) && file_exists('upload/category/'.$this->image_name))
+        {
+
+            return url('upload/category/'.$this->image_name);
+        }
+        else
+        {
+            return "";
+        }
     }
 }
