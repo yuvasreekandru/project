@@ -89,6 +89,7 @@ class ProductController extends Controller
             $product->category_id = trim($req->category_id);
             $product->sub_category_id = trim($req->sub_category_id);
             $product->brand_id = trim($req->brand_id);
+            $product->is_trendy = !empty($req->is_trendy) ? 1 : 0;
             $product->price = trim($req->price);
             $product->old_price = trim($req->old_price);
             $product->short_description = trim($req->short_description);
@@ -96,6 +97,7 @@ class ProductController extends Controller
             $product->additional_information = trim($req->additional_information);
             $product->shipping_returns = trim($req->shipping_returns);
             $product->status = trim($req->status);
+
             $product->save();
 
             ProductColor::deleteRecord($product->id);

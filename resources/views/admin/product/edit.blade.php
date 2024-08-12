@@ -90,6 +90,15 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Trendy Product <span style="color: red">*</span></label>
+                                                <div>
+                                                    <label><input type="checkbox" {{ !empty($product->is_trendy) ? 'checked': '' }} name="is_trendy"
+                                                        ></label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">

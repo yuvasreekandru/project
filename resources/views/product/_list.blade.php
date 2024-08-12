@@ -61,5 +61,4 @@
     </div><!-- End .row -->
 </div><!-- End .products -->
 
-{{-- pagination links --}}
-{{-- {{ $getProduct->appends(Illuminate\Support\Facades\Request::except('page'))->links() }} --}}
+

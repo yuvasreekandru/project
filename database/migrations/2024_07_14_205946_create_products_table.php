@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('additional_information')->nullable();
             $table->string('shipping_returns')->nullable();
+            $table->tinyinteger('is_trendy')->default(0);
             $table->tinyinteger('status')->default(0)->comment('0:active,1:inactive');
             $table->tinyinteger('is_delete')->default(0)->comment('0:not,1:deleted');
             $table->integer('created_by')->nullable();

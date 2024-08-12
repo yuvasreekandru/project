@@ -58,6 +58,21 @@ class Product extends Model
         ->get();
     return $return;
     }
+    static public function getProductTrendy()
+    {
+        $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
+        ->join('users', 'users.id', '=', 'products.created_by')
+        ->join('categories', 'categories.id', '=', 'products.category_id')
+        ->join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->where('products.is_trendy', '=', 1)
+        ->where('products.is_delete', '=', 0)
+        ->where('products.status', '=', 0)
+        ->groupBy('products.id')
+        ->orderBy('products.id', 'desc')
+        ->limit(20)
+        ->get();
+    return $return;
+    }
     static public function getProduct($category_id = '', $subcategory_id = '')
     {
         $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
