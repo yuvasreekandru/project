@@ -9,6 +9,8 @@ use App\Models\Page;
 use App\Models\Slider;
 use App\Models\Partner;
 use App\Models\Category;
+use App\Models\Product;
+
 
 
 use App\Mail\ContactUsMail;
@@ -25,12 +27,30 @@ class HomeController extends Controller
         $data['getSlider'] = Slider::getRecordActive();
         $data['getPartner'] = Partner::getRecordActive();
         $data['getCategory'] = Category::getRecordActiveHome();
+        $data['getProduct'] = Product::getRecentArrivals();
+
 
         $data['meta_title'] = $getPage->meta_title;
         $data['meta_description'] = $getPage->meta_description;
         $data['meta_keywords'] = $getPage->meta_keywords;
 
         return view("home", $data);
+    }
+
+    public function recent_arrival_category_product(Request $req)
+    {
+        $getProduct = Product::getRecentArrivals();
+        $getCategory = Category::getSingle($req->category_id);
+
+        return response()->json([
+            "status" => true,
+            "success" => view("product._list_recent_arrival",[
+                "getProduct" => $getProduct,
+                "getCategory" => $getCategory,
+
+            ])->render(),
+        ], 200);
+
     }
     public function contact()
     {

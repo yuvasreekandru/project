@@ -25,7 +25,6 @@ class Product extends Model
             ->paginate(50);
 
     }
-
     static public function getMyWishlist($user_id)
     {
         $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
@@ -39,6 +38,24 @@ class Product extends Model
         ->groupBy('products.id')
         ->orderBy('products.id', 'desc')
         ->paginate(10);
+    return $return;
+    }
+    static public function getRecentArrivals()
+    {
+        $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
+        ->join('users', 'users.id', '=', 'products.created_by')
+        ->join('categories', 'categories.id', '=', 'products.category_id')
+        ->join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->where('products.is_delete', '=', 0)
+        ->where('products.status', '=', 0);
+        if (!empty(Request::get('category_id')))
+        {
+            $return = $return->where('products.category_id', '=', Request::get('category_id'));
+        }
+       $return = $return->groupBy('products.id')
+        ->orderBy('products.id', 'desc')
+        ->limit(8)
+        ->get();
     return $return;
     }
     static public function getProduct($category_id = '', $subcategory_id = '')

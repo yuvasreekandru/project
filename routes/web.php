@@ -118,7 +118,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
     Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
-    
+
     // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
     Route::get('admin/contact-us/delete/{id}', [PagesController::class, 'contact_delete']);
@@ -168,6 +168,7 @@ Route::group(['middleware' => 'user'], function () {
 
 // ************* Home ********* //
 Route::get('/', [HomeController::class, 'home']);
+Route::post('recent_arrival_category_product', [HomeController::class, 'recent_arrival_category_product']);
 
 Route::get('contact', [HomeController::class, 'contact']);
 Route::post('contact', [HomeController::class, 'submit_contact']);
