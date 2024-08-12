@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\Ordercontroller;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogController;
 
 
 use App\Http\Controllers\HomeController;
@@ -138,6 +140,22 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/partner/edit/{id}', [PartnerController::class, 'edit']);
     Route::post('admin/partner/edit/{id}', [PartnerController::class, 'update']);
     Route::get('admin/partner/delete/{id}', [PartnerController::class, 'delete']);
+
+    //  ******** Blog Category *********** //
+    Route::get('admin/blog-category/list', [BlogCategoryController::class, 'list'])->name('blog-category.list');
+    Route::get('admin/blog-category/add', [BlogCategoryController::class, 'add'])->name('blog-category.add');
+    Route::post('admin/blog-category/add', [BlogCategoryController::class, 'insert']);
+    Route::get('admin/blog-category/edit/{id}', [BlogCategoryController::class, 'edit']);
+    Route::post('admin/blog-category/edit/{id}', [BlogCategoryController::class, 'update']);
+    Route::get('admin/blog-category/delete/{id}', [BlogCategoryController::class, 'delete']);
+
+  //  ******** Blog  *********** //
+  Route::get('admin/blog/list', [BlogController::class, 'list'])->name('blog.list');
+  Route::get('admin/blog/add', [BlogController::class, 'add'])->name('blog.add');
+  Route::post('admin/blog/add', [BlogController::class, 'insert']);
+  Route::get('admin/blog/edit/{id}', [BlogController::class, 'edit']);
+  Route::post('admin/blog/edit/{id}', [BlogController::class, 'update']);
+  Route::get('admin/blog/delete/{id}', [BlogController::class, 'delete']);
 
 
 

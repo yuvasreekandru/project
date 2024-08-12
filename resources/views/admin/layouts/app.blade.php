@@ -59,7 +59,16 @@
 <!-- Summernote -->
 <script src="{{ asset('AdminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
 
+<script>
 
+    $(function () {
+        // Summernote
+        $('.editor').summernote({
+            height:300
+        });
+
+      });
+</script>
 @yield('script')
 </body>
 </html>

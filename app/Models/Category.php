@@ -56,7 +56,6 @@ class Category extends Model
             ->where('categories.status', '=', 0)
             ->get();
     }
-
     public function getSubCategory()
     {
         return $this->hasMany(SubCategory::class, "category_id")

@@ -258,6 +258,24 @@
                 </a>
                </li>
                <li class="nav-item">
+                <a href="{{ route('blog-category.list') }}" class="nav-link @if (Request::segment(2) == 'blog-category') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Blog Category
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('blog.list') }}" class="nav-link @if (Request::segment(2) == 'blog') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Blog 
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
                 <a href="{{ route('setting.system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>

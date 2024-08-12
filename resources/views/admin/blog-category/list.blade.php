@@ -10,10 +10,10 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Category List</h1>
+                        <h1>Blog Category List</h1>
                     </div>
                     <div class="col-sm-6" style="text-align: right;">
-                        <a href="{{ route('category.add') }}" class="btn btn-primary">Add New Category</a>
+                        <a href="{{ route('blog-category.add') }}" class="btn btn-primary">Add New Blog Category</a>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -27,7 +27,7 @@
                         @include('admin.layouts.message')
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Category List</h3>
+                                <h3 class="card-title">Blog Category List</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body p-0">
@@ -35,14 +35,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>
-                                            <th>Image</th>
                                             <th>Name</th>
                                             <th>Slug</th>
                                             <th>Meta Title</th>
                                             <th>Meta Description</th>
                                             <th>Meta Keywords</th>
-                                            <th>Created By</th>
-                                            <th>Home</th>
                                             <th>Status</th>
                                             <th>Created Date</th>
                                             <th>Action</th>
@@ -53,23 +50,17 @@
                                         @foreach ($getRecord as $value)
                                             <tr>
                                                 <td>{{ $value->id }}</td>
-                                                <td>
-                                                    @if (!empty($value->getImage()))
-                                                        <img src="{{ $value->getImage() }}" height="100px" alt="">
-                                                    @endif
-                                                </td>
+
                                                 <td>{{ $value->name }}</td>
                                                 <td>{{ $value->slug }}</td>
                                                 <td>{{ $value->meta_title }}</td>
                                                 <td>{{ $value->meta_description }}</td>
                                                 <td>{{ $value->meta_keywords }}</td>
-                                                <td>{{ $value->created_by_name }}</td>
-                                                <td>{{ ($value->is_home == 1) ? 'Yes' : 'No'}}</td>
                                                 <td>{{ ($value->status == 0) ? 'Active' : 'InActive'}}</td>
                                                 <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
                                                 <td>
-                                                    <a href="{{ url('admin/category/edit/'.$value->id) }}" class="btn btn-primary">Edit</a>
-                                                    <a href="{{ url('admin/category/delete/'.$value->id) }}" class="btn btn-danger">Delete</a>
+                                                    <a href="{{ url('admin/blog-category/edit/'.$value->id) }}" class="btn btn-primary">Edit</a>
+                                                    <a href="{{ url('admin/blog-category/delete/'.$value->id) }}" class="btn btn-danger">Delete</a>
 
                                                 </td>
 
@@ -94,5 +85,6 @@
 @endsection
 
 @section('script')
-
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('AdminLTE/dist/js/pages/dashboard3.js') }}"></script>
 @endsection
