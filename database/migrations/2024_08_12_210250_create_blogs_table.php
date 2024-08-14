@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();
+            $table->integer('total_view')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('is_delete')->default(0);
             $table->timestamps();

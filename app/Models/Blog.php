@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Request;
 
 class Blog extends Model
 {
@@ -17,10 +18,10 @@ class Blog extends Model
     }
     static public function getSingleSlug($slug)
     {
-        return self::where('slug','=',$slug)
-                    ->where('blogs.status','=','0')
-                    ->where('blogs.is_delete','=','0')
-                    ->first();
+        return self::where('slug', '=', $slug)
+            ->where('blogs.status', '=', '0')
+            ->where('blogs.is_delete', '=', '0')
+            ->first();
     }
     static public function getRecord()
     {
@@ -39,14 +40,39 @@ class Blog extends Model
     }
     public function getImage()
     {
-        if(!empty($this->image_name) && file_exists('upload/blog/'.$this->image_name))
-        {
+        if (!empty($this->image_name) && file_exists('upload/blog/' . $this->image_name)) {
 
-            return url('upload/blog/'.$this->image_name);
-        }
-        else
-        {
+            return url('upload/blog/' . $this->image_name);
+        } else {
             return "";
         }
+    }
+    static public function getBlog()
+    {
+        $return = self::select('blogs.*');
+        if (!empty(Request::get('search'))) {
+            $return = $return->where('blogs.title', 'like', '%' . Request::get('search') . '%');
+        }
+
+        $return = $return->where('blogs.is_delete', '=', 0)
+            ->where('blogs.status', '=', 0)
+            ->orderBy('blogs.id', 'desc')
+            ->paginate(20);
+        return $return;
+    }
+    static public function getPopular()
+    {
+        $return = self::select('blogs.*');
+        $return = $return->where('blogs.is_delete', '=', 0)
+            ->where('blogs.status', '=', 0)
+            ->orderBy('blogs.total_view', 'desc')
+            ->limit(6)
+            ->get();
+        return $return;
+    }
+
+    public function getCategory()
+    {
+        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }
 }

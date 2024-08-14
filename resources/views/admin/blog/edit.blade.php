@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Category Name <span style="color: red">*</span></label>
-                                        <select class="form-control" name="category_id" required>
+                                        <select class="form-control" name="blog_category_id" required>
                                             <option value="">Select</option>
                                             @foreach ($getCategory as $category)
                                                 <option

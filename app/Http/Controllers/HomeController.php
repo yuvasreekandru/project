@@ -10,8 +10,8 @@ use App\Models\Slider;
 use App\Models\Partner;
 use App\Models\Category;
 use App\Models\Product;
-
-
+use App\Models\Blog;
+use App\Models\BlogCategory;
 
 use App\Mail\ContactUsMail;
 use Session;
@@ -194,6 +194,47 @@ class HomeController extends Controller
         $data['meta_description'] = $getPage->meta_description;
         $data['meta_keywords'] = $getPage->meta_keywords;
         return view("pages.privacy-policy", $data);
+
+    }
+    public function blog()
+    {
+        $getPage = Page::getSlug('blog');
+        $data['getPage'] = $getPage;
+
+        $data['meta_title'] = $getPage->meta_title;
+        $data['meta_description'] = $getPage->meta_description;
+        $data['meta_keywords'] = $getPage->meta_keywords;
+
+        $data['getBlog'] = Blog::getBlog();
+        $data['getBlogCategory'] = BlogCategory::getRecordActive();
+        $data['getPopularPosts'] = Blog::getPopular();
+
+        return view("blog.list", $data);
+    }
+    public function blog_detail($slug)
+    {
+        $getBlog = Blog::getSingleSlug($slug);
+        if(!empty($getBlog))
+        {
+            $total_view = $getBlog->total_view;
+            $getBlog->total_view = $total_view + 1;
+            $getBlog->save();
+
+            $data['getBlog'] = $getBlog;
+            $data['meta_title'] = $getBlog->meta_title;
+            $data['meta_description'] = $getBlog->meta_description;
+            $data['meta_keywords'] = $getBlog->meta_keywords;
+
+            $data['getBlogCategory'] = BlogCategory::getRecordActive();
+            $data['getPopularPosts'] = Blog::getPopular();
+
+            return view("blog.detail", $data);
+        }
+        else
+        {
+            abort(404);
+        }
+
 
     }
 }

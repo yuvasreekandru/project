@@ -46,5 +46,11 @@ class BlogCategory extends Model
             ->get();
     }
 
-
+    public function getCountBlog()
+    {
+        return $this->hasMany(Blog::class,'blog_category_id')
+            ->where('blogs.is_delete', '=', 0)
+            ->where('blogs.status', '=', 0)
+            ->count();
+    }
 }
