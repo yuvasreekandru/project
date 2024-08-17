@@ -47,6 +47,12 @@
                                         <input type="file" class="form-control" name="image_name" required>
                                     </div>
                                     <div class="form-group">
+                                        <label>Short Description<span style="color: red"></span></label>
+                                        <textarea  class="form-control editor"
+                                            name="short_description"></textarea>
+                                        <div style="color: red;">{{ $errors->first('short_description') }}</div>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Description<span style="color: red"></span></label>
                                         <textarea  class="form-control editor"
                                             name="description"></textarea>

@@ -38,13 +38,21 @@
                                                 <span class="meta-separator">|</span>
                                                 <a href="#">{{ date('M d,Y',strtotime($value->created_at)) }}</a>
                                                 <span class="meta-separator">|</span>
-                                                <a href="#">0 Comments</a>
+                                                <a href="#">{{ $value->getCommentCount() }} Comments</a>
                                             </div><!-- End .entry-meta -->
 
                                             <h2 class="entry-title">
                                                 <a href="{{ url('blog/'.$value->slug) }}">{{ $value->title }}</a>
                                             </h2><!-- End .entry-title -->
-
+                                            @if (!empty($value->getCategory))
+                                                <div class="entry-cats">
+                                                    <a href="{{ url('blog/category/'.$value->getCategory->slug)}}">{{ $value->getCategory->name }}</a>
+                                                </div><!-- End .entry-cats -->
+                                            @endif
+                                            <div class="entry-content">
+                                                {!! $value->short_description !!}
+                                                <a href="{{ url('blog/'.$value->slug) }}" class="read-more">Continue Reading</a>
+                                            </div>
                                         </div><!-- End .entry-body -->
                                     </article><!-- End .entry -->
                                 </div><!-- End .entry-item -->

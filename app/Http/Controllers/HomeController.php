@@ -12,6 +12,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\BlogComment;
+
 
 use App\Mail\ContactUsMail;
 use Session;
@@ -228,6 +230,9 @@ class HomeController extends Controller
             $data['getBlogCategory'] = BlogCategory::getRecordActive();
             $data['getPopularPosts'] = Blog::getPopular();
 
+            $data['getRelatedPost'] = Blog::getRelatedPost($getBlog->blog_category_id,$getBlog->id);
+
+
             return view("blog.detail", $data);
         }
         else
@@ -235,6 +240,19 @@ class HomeController extends Controller
             abort(404);
         }
 
+
+    }
+
+    public function submit_blog_comment(Request $req)
+    {
+        $comment = new BlogComment();
+        $comment->user_id = Auth::user()->id;
+        $comment->blog_id = $req->blog_id;
+        $comment->comment = trim($req->comment);
+
+        $comment->save();
+
+        return redirect()->back()->with('success',"Your comment successfully created");
 
     }
 }

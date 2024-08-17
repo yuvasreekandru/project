@@ -70,9 +70,34 @@ class Blog extends Model
             ->get();
         return $return;
     }
-
+    static public function getRelatedPost($blog_category_id, $blog_id)
+    {
+        $return = self::select('blogs.*');
+        $return = $return->where('blogs.is_delete', '=', 0)
+            ->where('blogs.blog_category_id', '=', $blog_category_id)
+            ->where('blogs.id', '=', $blog_id)
+            ->where('blogs.status', '=', 0)
+            ->orderBy('blogs.total_view', 'desc')
+            ->limit(6)
+            ->get();
+        return $return;
+    }
     public function getCategory()
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+    }
+    public function getComment()
+    {
+        return $this->hasMany(BlogComment::class, 'blog_id')
+        ->select('blog_comments.*')
+            ->join('users','users.id','=','blog_comments.user_id')
+            ->orderBy('blog_comments.id','desc');
+    }
+    public function getCommentCount()
+    {
+        return $this->hasMany(BlogComment::class, 'blog_id')
+            ->select('blog_comment_id')
+            ->join('users','users.id','=','blog_comments.user_id')
+            ->count();
     }
 }

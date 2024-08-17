@@ -181,6 +181,9 @@ Route::group(['middleware' => 'user'], function () {
 
     Route::get('my-wishlist', [ProductFront::class, 'my_wishlist']);
 
+    Route::post('blog/submit_comment', [HomeController::class, 'submit_blog_comment']);
+
+
 
 });
 

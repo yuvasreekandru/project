@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->integer('blog_category_id');
             $table->string('image_name')->nullable();
+            $table->text('short_description')->nullable();
             $table->longText('description')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();

@@ -53,6 +53,11 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
+                                        <label>Short Description<span style="color: red"></span></label>
+                                        <textarea class="form-control editor" name="short_description">{{ $getRecord->short_description }}</textarea>
+                                        <div style="color: red;">{{ $errors->first('short_description') }}</div>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Description<span style="color: red"></span></label>
                                         <textarea class="form-control editor" name="description">{{ $getRecord->description }}</textarea>
                                         <div style="color: red;">{{ $errors->first('description') }}</div>
