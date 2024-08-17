@@ -35,7 +35,16 @@ class Blog extends Model
         return self::select('blogs.*')
             ->where('blogs.is_delete', '=', 0)
             ->where('blogs.status', '=', 0)
-            ->orderBy('blogs.name', 'asc')
+            ->orderBy('blogs.title', 'asc')
+            ->get();
+    }
+    static public function getRecordActiveHome()
+    {
+        return self::select('blogs.*')
+            ->where('blogs.is_delete', '=', 0)
+            ->where('blogs.status', '=', 0)
+            ->limit(3)
+            ->orderBy('blogs.id', 'asc')
             ->get();
     }
     public function getImage()
@@ -47,13 +56,15 @@ class Blog extends Model
             return "";
         }
     }
-    static public function getBlog()
+    static public function getBlog($blog_category_id = '')
     {
         $return = self::select('blogs.*');
         if (!empty(Request::get('search'))) {
             $return = $return->where('blogs.title', 'like', '%' . Request::get('search') . '%');
         }
-
+        if (!empty($blog_category_id)) {
+            $return = $return->where('blogs.blog_category_id', '=',$blog_category_id);
+        }
         $return = $return->where('blogs.is_delete', '=', 0)
             ->where('blogs.status', '=', 0)
             ->orderBy('blogs.id', 'desc')

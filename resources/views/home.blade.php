@@ -177,25 +177,25 @@
                                         <a href="{{ url($value->slug) }}">
                                             @if (!empty($getProductImage) && !empty($getProductImage->getLogo()))
                                                 <img style="height:280px; width:100%;"
-                                                    src="{{ $getProductImage->getLogo() }}"
-                                                    alt="{{ $value->title }}" class="product-image">
+                                                    src="{{ $getProductImage->getLogo() }}" alt="{{ $value->title }}"
+                                                    class="product-image">
                                             @endif
                                         </a>
 
                                         <div class="product-action-vertical">
                                             @if (!empty(Auth::check()))
-
-                                                        <a href="javascript:;" class="btn-product-icon btn-wishlist btn-expandable
+                                                <a href="javascript:;"
+                                                    class="btn-product-icon btn-wishlist btn-expandable
                                                         add_to_wishlist add-to-wishlist{{ $value->id }}
-                                                        {{!empty($value->checkWishlist($value->id)) ? 'btn-wishlist-add' : '' }}"
-                                                        title="Wishlist" id={{ $value->id }}><span>add to wishlist
-                                                            </span></a>
-                                                    @else
-                                                        <a href="#signin-modal" data-toggle="modal" class="btn-product-icon btn-wishlist btn-expandable"
-                                                            title="Wishlist"><span>add to wishlist </span>
-                                                        </a>
-
-                                                    @endif
+                                                        {{ !empty($value->checkWishlist($value->id)) ? 'btn-wishlist-add' : '' }}"
+                                                    title="Wishlist" id={{ $value->id }}><span>add to wishlist
+                                                    </span></a>
+                                            @else
+                                                <a href="#signin-modal" data-toggle="modal"
+                                                    class="btn-product-icon btn-wishlist btn-expandable"
+                                                    title="Wishlist"><span>add to wishlist </span>
+                                                </a>
+                                            @endif
 
                                         </div><!-- End .product-action-vertical -->
 
@@ -214,7 +214,8 @@
                                         </div><!-- End .product-price -->
                                         <div class="ratings-container">
                                             <div class="ratings">
-                                                <div class="ratings-val" style="width: {{ $value->getReviewRating($value->id) }}%;"></div>
+                                                <div class="ratings-val"
+                                                    style="width: {{ $value->getReviewRating($value->id) }}%;"></div>
                                                 <!-- End .ratings-val -->
                                             </div><!-- End .ratings -->
                                             <span class="ratings-text">( {{ $value->getTotalReview() }} Reviews )</span>
@@ -354,108 +355,65 @@
 
             <div class="mb-2"></div><!-- End .mb-2 -->
         </div><!-- End .container -->
-        <div class="blog-posts pt-7 pb-7" style="background-color: #fafafa;">
-            <div class="container">
-                <h2 class="title-lg text-center mb-3 mb-md-4">From Our Blog</h2><!-- End .title-lg text-center -->
+        @if (!empty($getBlog->count()))
+            <div class="blog-posts pt-7 pb-7" style="background-color: #fafafa;">
+                <div class="container">
+                    <h2 class="title-lg text-center mb-3 mb-md-4">Our Blog</h2><!-- End .title-lg text-center -->
 
-                <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl"
-                    data-owl-options='{
-                        "nav": false,
-                        "dots": true,
-                        "items": 3,
-                        "margin": 20,
-                        "loop": false,
-                        "responsive": {
-                            "0": {
-                                "items":1
-                            },
-                            "600": {
-                                "items":2
-                            },
-                            "992": {
-                                "items":3
+                    <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl"
+                        data-owl-options='{
+                            "nav": false,
+                            "dots": true,
+                            "items": 3,
+                            "margin": 20,
+                            "loop": false,
+                            "responsive": {
+                                "0": {
+                                    "items":1
+                                },
+                                "600": {
+                                    "items":2
+                                },
+                                "992": {
+                                    "items":3
+                                }
                             }
-                        }
-                    }'>
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="{{ asset('molla/assets/images/blog/home/post-1.jpg') }}" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
+                        }'>
+                        @foreach ($getBlog as $blog)
+                            <article class="entry entry-display">
+                                <figure class="entry-media">
+                                    <a href="{{ url('blog/'.$blog->slug) }}">
+                                        <img src="{{ $blog->getImage() }}" alt="{{ $blog->title }}" style="height: 260px; width: 100%; object-fit: cover;">
+                                    </a>
+                                </figure><!-- End .entry-media -->
 
-                        <div class="entry-body pb-4 text-center">
-                            <div class="entry-meta">
-                                <a href="#">Nov 22, 2018</a>, 0 Comments
-                            </div><!-- End .entry-meta -->
+                                <div class="entry-body pb-4 text-center">
+                                    <div class="entry-meta">
+                                        <a href="#">{{ date('M d,Y',strtotime($blog->created_at)) }}</a>, {{ $blog->getCommentCount() }} Comments
+                                    </div><!-- End .entry-meta -->
 
-                            <h3 class="entry-title">
-                                <a href="single.html">Sed adipiscing ornare.</a>
-                            </h3><!-- End .entry-title -->
+                                    <h3 class="entry-title">
+                                        <a href="{{ url('blog/'.$blog->slug) }}">{{ $blog->title }}</a>
+                                    </h3><!-- End .entry-title -->
 
-                            <div class="entry-content">
-                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus
-                                    hendrerit.<br>Pelletesque aliquet nibh necurna. </p>
-                                <a href="single.html" class="read-more">Read More</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
+                                    <div class="entry-content">
+                                        <p>{!! $blog->short_description !!} </p>
+                                        <a href="{{ url('blog/'.$blog->slug) }}" class="read-more">Read More</a>
+                                    </div><!-- End .entry-content -->
+                                </div><!-- End .entry-body -->
+                            </article><!-- End .entry -->
+                        @endforeach
 
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="{{ asset('molla/assets/images/blog/home/post-2.jpg') }}" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
+                    </div><!-- End .owl-carousel -->
+                </div><!-- container -->
 
-                        <div class="entry-body pb-4 text-center">
-                            <div class="entry-meta">
-                                <a href="#">Dec 12, 2018</a>, 0 Comments
-                            </div><!-- End .entry-meta -->
+                <div class="more-container text-center mb-0 mt-3">
+                    <a href="{{ url('blog') }}" class="btn btn-outline-darker btn-more"><span>View more articles</span><i
+                            class="icon-long-arrow-right"></i></a>
+                </div><!-- End .more-container -->
+            </div>
+        @endif
 
-                            <h3 class="entry-title">
-                                <a href="single.html">Fusce lacinia arcuet nulla.</a>
-                            </h3><!-- End .entry-title -->
-
-                            <div class="entry-content">
-                                <p>Sed pretium, ligula sollicitudin laoreet<br>viverra, tortor libero sodales leo, eget
-                                    blandit nunc tortor eu nibh. Nullam mollis justo. </p>
-                                <a href="single.html" class="read-more">Read More</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
-
-                    <article class="entry entry-display">
-                        <figure class="entry-media">
-                            <a href="single.html">
-                                <img src="{{ asset('molla/assets/images/blog/home/post-3.jpg') }}" alt="image desc">
-                            </a>
-                        </figure><!-- End .entry-media -->
-
-                        <div class="entry-body pb-4 text-center">
-                            <div class="entry-meta">
-                                <a href="#">Dec 19, 2018</a>, 2 Comments
-                            </div><!-- End .entry-meta -->
-
-                            <h3 class="entry-title">
-                                <a href="single.html">Quisque volutpat mattis eros.</a>
-                            </h3><!-- End .entry-title -->
-
-                            <div class="entry-content">
-                                <p>Suspendisse potenti. Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae
-                                    luctus metus libero eu augue. </p>
-                                <a href="single.html" class="read-more">Read More</a>
-                            </div><!-- End .entry-content -->
-                        </div><!-- End .entry-body -->
-                    </article><!-- End .entry -->
-                </div><!-- End .owl-carousel -->
-            </div><!-- container -->
-
-            <div class="more-container text-center mb-0 mt-3">
-                <a href="blog.html" class="btn btn-outline-darker btn-more"><span>View more articles</span><i
-                        class="icon-long-arrow-right"></i></a>
-            </div><!-- End .more-container -->
-        </div>
         <div class="cta cta-display bg-image pt-4 pb-4"
             style="background-image: url(assets/images/backgrounds/cta/bg-6.jpg);">
             <div class="container">

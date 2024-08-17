@@ -26,6 +26,7 @@ class HomeController extends Controller
         $getPage = Page::getSlug('home');
         $data['getPage'] = $getPage;
 
+        $data['getBlog'] = Blog::getRecordActive();
         $data['getSlider'] = Slider::getRecordActive();
         $data['getPartner'] = Partner::getRecordActive();
         $data['getCategory'] = Category::getRecordActiveHome();
@@ -232,7 +233,6 @@ class HomeController extends Controller
 
             $data['getRelatedPost'] = Blog::getRelatedPost($getBlog->blog_category_id,$getBlog->id);
 
-
             return view("blog.detail", $data);
         }
         else
@@ -254,5 +254,27 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success',"Your comment successfully created");
 
+    }
+    public function blog_category($slug)
+    {
+        $getCategory = BlogCategory::getSingleSlug($slug);
+        if(!empty($getCategory))
+        {
+
+            $data['getCategory'] = $getCategory;
+            $data['meta_title'] = $getCategory->meta_title;
+            $data['meta_description'] = $getCategory->meta_description;
+            $data['meta_keywords'] = $getCategory->meta_keywords;
+
+            $data['getBlogCategory'] = BlogCategory::getRecordActive();
+            $data['getPopularPosts'] = Blog::getPopular();
+            $data['getBlog'] = Blog::getBlog($getCategory->id);
+
+            return view("blog.category", $data);
+        }
+        else
+        {
+            abort(404);
+        }
     }
 }
