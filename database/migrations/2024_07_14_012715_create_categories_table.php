@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('image_name')->nullable();
             $table->string('button_name')->nullable();
             $table->tinyinteger('is_home')->default(0)->comment('0:active, 1:inactive');
+            $table->tinyinteger('is_menu')->default(0)->comment('0:active, 1:inactive');
 
             $table->timestamps();
         });

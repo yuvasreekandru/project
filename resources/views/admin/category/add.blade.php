@@ -62,6 +62,10 @@
                                         <label>Home Screen</label>
                                         <input type="checkbox" name="is_home">
                                     </div>
+                                    <div class="form-group">
+                                        <label>Menu</label>
+                                        <input type="checkbox" name="is_menu">
+                                    </div>
                                     <hr>
                                     <div class="form-group">
                                         <label>Meta Title<span style="color: red">*</span></label>

@@ -36,6 +36,8 @@ class CategoryController extends Controller
         $category->created_by = Auth::user()->id;
         $category->button_name = trim($req->button_name);
         $category->is_home = !empty($req->is_home) ? 1 : 0;
+        $category->is_menu = !empty($req->is_menu) ? 1 : 0;
+
 
         if(!empty($req->file('image_name')))
         {
@@ -74,6 +76,8 @@ class CategoryController extends Controller
 
         $category->button_name = trim($req->button_name);
         $category->is_home = !empty($req->is_home) ? 1 : 0;
+        $category->is_menu= !empty($req->is_menu) ? 1 : 0;
+
 
         if(!empty($req->file('image_name')))
         {

@@ -56,6 +56,15 @@ class Category extends Model
             ->where('categories.status', '=', 0)
             ->get();
     }
+    static public function getRecordMenuHeader()
+    {
+        return self::select('categories.*')
+            ->join('users', 'users.id', '=', 'categories.created_by')
+            ->where('categories.is_delete', '=', 0)
+            ->where('categories.status', '=', 0)
+            ->where('categories.is_menu', '=', 1)
+            ->get();
+    }
     public function getSubCategory()
     {
         return $this->hasMany(SubCategory::class, "category_id")

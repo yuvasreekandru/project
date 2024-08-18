@@ -56,7 +56,7 @@
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="">
+                        <li class="{{ (Request::segment(1) == '') ? 'active' : '' }}">
                             <a href="{{ url('/') }}" class="">Home</a>
 
                         </li>
@@ -96,7 +96,15 @@
                                 </div><!-- End .row -->
                             </div><!-- End .megamenu megamenu-md -->
                         </li>
+                        @php
+                            $getCategoryHeaderMenu = App\Models\Category::getRecordMenuHeader();
+                        @endphp
+                        @foreach ($getCategoryHeaderMenu as $menu)
+                            <li class="{{ (Request::segment(1) == $menu->slug) ? 'active' : '' }}">
+                                <a href="{{ url($menu->slug) }}" class="">{{ $menu->name }}</a>
 
+                            </li>
+                        @endforeach
                     </ul><!-- End .menu -->
                 </nav><!-- End .main-nav -->
             </div><!-- End .header-left -->
@@ -153,7 +161,8 @@
                                                 </a>
                                             </figure>
                                             <a href="{{ url('cart/delete/' . $header_cart->rowId) }}"
-                                                class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+                                                class="btn-remove" title="Remove Product"><i
+                                                    class="icon-close"></i></a>
                                         </div><!-- End .product -->
                                     @endif
                                 @endforeach

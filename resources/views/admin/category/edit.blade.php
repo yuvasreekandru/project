@@ -68,6 +68,10 @@
                                         <input type="checkbox" {{ !empty($getRecord->is_home) ? 'checked' : '' }}
                                             name="is_home">
                                     </div>
+                                    <div class="form-group">
+                                        <label>Menu</label>
+                                        <input type="checkbox" {{ !empty($getRecord->is_menu) ? 'checked' : '' }} name="is_menu">
+                                    </div>
                                     <hr>
                                     <div class="form-group">
                                         <label>Meta Title<span style="color: red">*</span></label>
