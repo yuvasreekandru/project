@@ -13,6 +13,8 @@ use App\Models\Product;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
+use App\Models\HomeSetting;
+
 
 
 use App\Mail\ContactUsMail;
@@ -26,6 +28,7 @@ class HomeController extends Controller
         $getPage = Page::getSlug('home');
         $data['getPage'] = $getPage;
 
+        $data['getHomeSetting'] = HomeSetting::getSingle();
         $data['getBlog'] = Blog::getRecordActive();
         $data['getSlider'] = Slider::getRecordActive();
         $data['getPartner'] = Partner::getRecordActive();

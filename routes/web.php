@@ -121,6 +121,9 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
     Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
 
+    Route::get('admin/setting/home-settings', [PagesController::class, 'home_settings'])->name('setting.home-settings');
+    Route::post('admin/setting/home-settings', [PagesController::class, 'update_home_settings']);
+
     // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
     Route::get('admin/contact-us/delete/{id}', [PagesController::class, 'contact_delete']);

@@ -135,7 +135,7 @@
         @if (!empty($getProductTrendy->count()))
             <div class="container">
                 <div class="heading heading-center mb-3">
-                    <h2 class="title-lg">Trendy Products</h2><!-- End .title -->
+                    <h2 class="title-lg">{{ !empty($getHomeSetting->trendy_product_title) ? $getHomeSetting->trendy_product_title : 'Trendy Products' }}</h2><!-- End .title -->
 
                 </div><!-- End .heading -->
 
@@ -233,7 +233,7 @@
         @endif
         @if (!empty($getCategory->count()))
             <div class="container categories pt-6">
-                <h2 class="title-lg text-center mb-4">Shop by Categories</h2><!-- End .title-lg text-center -->
+                <h2 class="title-lg text-center mb-4">{{ !empty($getHomeSetting->shop_category_title) ? $getHomeSetting->shop_category_title : 'Shop by Categories' }}</h2><!-- End .title-lg text-center -->
 
                 <div class="row">
                     @foreach ($getCategory as $category)
@@ -269,7 +269,7 @@
 
         <div class="container">
             <div class="heading heading-center mb-6">
-                <h2 class="title">Recent Arrivals</h2><!-- End .title -->
+                <h2 class="title">{{ !empty($getHomeSetting->recent_arrival_title) ? $getHomeSetting->recent_arrival_title : 'Recent Arrivals' }}</h2><!-- End .title -->
 
                 <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                     <li class="nav-item">
@@ -317,40 +317,51 @@
         <div class="container">
             <hr>
             <div class="row justify-content-center">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon-box icon-box-card text-center">
-                        <span class="icon-box-icon">
-                            <i class="icon-rocket"></i>
-                        </span>
-                        <div class="icon-box-content">
-                            <h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
-                            <p>Free shipping for orders over $50</p>
-                        </div><!-- End .icon-box-content -->
-                    </div><!-- End .icon-box -->
-                </div><!-- End .col-lg-4 col-sm-6 -->
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon-box icon-box-card text-center">
-                        <span class="icon-box-icon">
-                            <i class="icon-rotate-left"></i>
-                        </span>
-                        <div class="icon-box-content">
-                            <h3 class="icon-box-title">Return & Refund</h3><!-- End .icon-box-title -->
-                            <p>Free 100% money back guarantee</p>
-                        </div><!-- End .icon-box-content -->
-                    </div><!-- End .icon-box -->
-                </div><!-- End .col-lg-4 col-sm-6 -->
-
-                <div class="col-lg-4 col-sm-6">
-                    <div class="icon-box icon-box-card text-center">
-                        <span class="icon-box-icon">
-                            <i class="icon-life-ring"></i>
-                        </span>
-                        <div class="icon-box-content">
-                            <h3 class="icon-box-title">Quality Support</h3><!-- End .icon-box-title -->
-                            <p>Alway online feedback 24/7</p>
-                        </div><!-- End .icon-box-content -->
-                    </div><!-- End .icon-box -->
-                </div><!-- End .col-lg-4 col-sm-6 -->
+                @if (!empty($getHomeSetting->payment_delivery_title))
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="icon-box icon-box-card text-center">
+                            @if (!empty($getHomeSetting->getPaymentImage()))
+                            <span class="icon-box-icon">
+                                <img src="{{ $getHomeSetting->getPaymentImage() }}" style="width: 50px;" alt="">
+                            </span>
+                        @endif
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->payment_delivery_title) ? $getHomeSetting->payment_delivery_title : 'Payment & Delivery' }}</h3><!-- End .icon-box-title -->
+                                <p>{{ $getHomeSetting->payment_delivery_description }} </p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-lg-4 col-sm-6 -->
+                @endif
+                @if (!empty($getHomeSetting->refund_title))
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="icon-box icon-box-card text-center">
+                            @if (!empty($getHomeSetting->getRefundImage()))
+                                <span class="icon-box-icon">
+                                    <img src="{{ $getHomeSetting->getRefundImage() }}" style="width: 50px;" alt="">
+                                </span>
+                            @endif
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->refund_title) ? $getHomeSetting->refund_title : 'Return & Refund' }}</h3><!-- End .icon-box-title -->
+                                <p>{{ $getHomeSetting->refund_description }}</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-lg-4 col-sm-6 -->
+                @endif
+                @if (!empty($getHomeSetting->support_title))
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="icon-box icon-box-card text-center">
+                            @if (!empty($getHomeSetting->getSupportImage()))
+                                <span class="icon-box-icon">
+                                    <img src="{{ $getHomeSetting->getSupportImage() }}" style="width: 50px;" alt="">
+                                </span>
+                            @endif
+                            <div class="icon-box-content">
+                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->support_title) ? $getHomeSetting->support_title : 'Quality Support' }}</h3><!-- End .icon-box-title -->
+                                <p>{{ $getHomeSetting->support_description }}</p>
+                            </div><!-- End .icon-box-content -->
+                        </div><!-- End .icon-box -->
+                    </div><!-- End .col-lg-4 col-sm-6 -->
+                @endif
             </div><!-- End .row -->
 
             <div class="mb-2"></div><!-- End .mb-2 -->
@@ -358,7 +369,7 @@
         @if (!empty($getBlog->count()))
             <div class="blog-posts pt-7 pb-7" style="background-color: #fafafa;">
                 <div class="container">
-                    <h2 class="title-lg text-center mb-3 mb-md-4">Our Blog</h2><!-- End .title-lg text-center -->
+                    <h2 class="title-lg text-center mb-3 mb-md-4">{{ !empty($getHomeSetting->blog_title) ? $getHomeSetting->blog_title : 'Our Blog' }}</h2><!-- End .title-lg text-center -->
 
                     <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl"
                         data-owl-options='{
@@ -415,23 +426,29 @@
         @endif
 
         <div class="cta cta-display bg-image pt-4 pb-4"
-            style="background-image: url(assets/images/backgrounds/cta/bg-6.jpg);">
+            style="background-image: url('{{ $getHomeSetting->getSignupImage() }}');">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-10 col-lg-9 col-xl-8">
-                        <div class="row no-gutters flex-column flex-sm-row align-items-sm-center">
-                            <div class="col">
-                                <h3 class="cta-title text-white">Sign Up & Get 10% Off</h3><!-- End .cta-title -->
-                                <p class="cta-desc text-white">Molla presents the best in interior design</p>
-                                <!-- End .cta-desc -->
-                            </div><!-- End .col -->
+                    @if (!empty($getHomeSetting->signup_title))
+                        <div class="col-md-10 col-lg-9 col-xl-8">
+                            <div class="row no-gutters flex-column flex-sm-row align-items-sm-center">
+                                <div class="col">
+                                    <h3 class="cta-title text-white">{{ !empty($getHomeSetting->signup_title) ? $getHomeSetting->signup_title : 'Sign Up & Get 10% Off' }}</h3><!-- End .cta-title -->
+                                    <p class="cta-desc text-white">{{ $getHomeSetting->signup_description }}</p>
+                                    <!-- End .cta-desc -->
+                                </div><!-- End .col -->
 
-                            <div class="col-auto">
-                                <a href="login.html" class="btn btn-outline-white"><span>SIGN UP</span><i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .col-auto -->
-                        </div><!-- End .row no-gutters -->
-                    </div><!-- End .col-md-10 col-lg-9 -->
+                                <div class="col-auto">
+                                    @if (empty(Auth::check()))
+
+                                        <a href="#signin-modal" data-toggle="modal" class="btn btn-outline-white"><span>SIGN UP</span><i
+                                            class="icon-long-arrow-right"></i></a>
+                                    @endif
+
+                                </div><!-- End .col-auto -->
+                            </div><!-- End .row no-gutters -->
+                        </div><!-- End .col-md-10 col-lg-9 -->
+                    @endif
                 </div><!-- End .row -->
             </div><!-- End .container -->
         </div><!-- End .cta -->

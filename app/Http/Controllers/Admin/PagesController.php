@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\SystemSetting;
 use App\Models\ContactUs;
+use App\Models\HomeSetting;
+
 
 
 use Str;
@@ -130,6 +132,80 @@ class PagesController extends Controller
         $save->save();
 
         return redirect()->back()->with("success", "setting successfully updated");
+
+    }
+    public function home_settings()
+    {
+        $data['getRecord'] = HomeSetting::getSingle();
+        $data['header_title'] = "Home Settings";
+        return view("admin.setting.home-settings", $data);
+    }
+    public function update_home_settings(Request $req)
+    {
+        $save = HomeSetting::getSingle();
+        $save->trendy_product_title = trim($req->trendy_product_title);
+        $save->shop_category_title = trim($req->shop_category_title);
+        $save->recent_arrival_title = trim($req->recent_arrival_title);
+        $save->blog_title = trim($req->blog_title);
+        $save->payment_delivery_title = trim($req->payment_delivery_title);
+        $save->payment_delivery_description = trim($req->payment_delivery_description);
+        $save->refund_title = trim($req->refund_title);
+        $save->refund_description = trim($req->refund_description);
+        $save->support_title = trim($req->support_title);
+        $save->support_description = trim($req->support_description);
+        $save->signup_title = trim($req->signup_title);
+        $save->signup_description = trim($req->signup_description);
+
+
+        if(!empty($req->file('payment_delivery_image')))
+        {
+
+                $file = $req->file('payment_delivery_image');
+                $ext = $file->getClientOriginalExtension();
+                $randomStr = Str::random(10);
+                $filename = strtolower($randomStr) .'.'. $ext;
+                $file->move('upload/settings/', $filename);
+
+                $save->payment_delivery_image = trim($filename);
+        }
+
+        if(!empty($req->file('refund_image')))
+        {
+
+                $file = $req->file('refund_image');
+                $ext = $file->getClientOriginalExtension();
+                $randomStr = Str::random(10);
+                $filename = strtolower($randomStr) .'.'. $ext;
+                $file->move('upload/settings/', $filename);
+
+                $save->refund_image = trim($filename);
+        }
+        if(!empty($req->file('support_image')))
+        {
+
+                $file = $req->file('support_image');
+                $ext = $file->getClientOriginalExtension();
+                $randomStr = Str::random(10);
+                $filename = strtolower($randomStr) .'.'. $ext;
+                $file->move('upload/settings/', $filename);
+
+                $save->support_image = trim($filename);
+        }
+        if(!empty($req->file('signup_image')))
+        {
+
+                $file = $req->file('signup_image');
+                $ext = $file->getClientOriginalExtension();
+                $randomStr = Str::random(10);
+                $filename = strtolower($randomStr) .'.'. $ext;
+                $file->move('upload/settings/', $filename);
+
+                $save->signup_image = trim($filename);
+        }
+
+        $save->save();
+
+        return redirect()->back()->with("success", "Home Setting successfully updated");
 
     }
 

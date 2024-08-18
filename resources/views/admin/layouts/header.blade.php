@@ -271,7 +271,7 @@
 
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
-                        Blog 
+                        Blog
                     </p>
                 </a>
                </li>
@@ -281,6 +281,15 @@
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
                         System Settings
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.home-settings') }}" class="nav-link @if (Request::segment(2) == 'home-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Home Settings
                     </p>
                 </a>
                </li>
