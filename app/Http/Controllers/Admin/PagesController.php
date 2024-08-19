@@ -8,14 +8,19 @@ use App\Models\Page;
 use App\Models\SystemSetting;
 use App\Models\ContactUs;
 use App\Models\HomeSetting;
-
+use App\Models\Notification;
 
 
 use Str;
 
-
 class PagesController extends Controller
 {
+    public function notification()
+    {
+        $data['getRecord'] = Notification::getRecord();
+        $data['header_title'] = "Notifications";
+        return view("admin.notification.list", $data);
+    }
     public function contactUsList()
     {
         $data['getRecord'] = ContactUs::getRecord();
@@ -208,5 +213,6 @@ class PagesController extends Controller
         return redirect()->back()->with("success", "Home Setting successfully updated");
 
     }
+
 
 }

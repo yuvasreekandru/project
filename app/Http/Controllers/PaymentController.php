@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Notification;
+
 
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Stripe\Stripe;
@@ -265,6 +267,14 @@ class PaymentController extends Controller
                     $getOrder->is_payment = 1;
                     $getOrder->save();
 
+                    Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
+                    // notification message to admin side
+
+                    $user_id = 1;
+                    $url = url('admin/orders/details/'.$getOrder->id);
+                    $message = "New Order Placed #".$getOrder->order_number;
+                    Notification::insertRecord($user_id, $url, $message);
+                    // end notification message to admin side
                     Cart::destroy();
 
                     return redirect('cart')->with('success', 'Order successfully placed');
@@ -370,7 +380,13 @@ class PaymentController extends Controller
                 $getOrder->save();
 
                 Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
+                // notification message to admin side
 
+                $user_id = 1;
+                $url = url('admin/orders/details/'.$getOrder->id);
+                $message = "New Order Placed #".$getOrder->order_number;
+                Notification::insertRecord($user_id, $url, $message);
+                // end notification message to admin side
                 Cart::destroy();
                 return redirect('cart')->with('success', "Order successfully placed");
             } else {
@@ -395,7 +411,13 @@ class PaymentController extends Controller
             $getOrder->save();
 
             Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
+            // notification message to admin side
 
+            $user_id = 1;
+            $url = url('admin/orders/details/'.$getOrder->id);
+            $message = "New Order Placed #".$getOrder->order_number;
+            Notification::insertRecord($user_id, $url, $message);
+            // end notification message to admin side
             Cart::destroy();
 
             return redirect('cart')->with('success', 'Order successfully placed');

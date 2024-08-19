@@ -94,31 +94,28 @@
                 <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
         </li>
+
+        @php
+            $getUnreadNotification = App\Models\Notification::getUnreadNotification();
+        @endphp
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
+                <span class="badge badge-warning navbar-badge">{{ $getUnreadNotification->count() }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <span class="dropdown-item dropdown-header">{{ $getUnreadNotification->count() }} Notifications</span>
+                @foreach ($getUnreadNotification as $notification)
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ $notification->url }}?noti_id={{ $notification->id }}" class="dropdown-item">
+                        <div> {{ $notification->message }}</div>
+                        <div class="float-right text-muted text-sm">{{ date('d-m-Y h:i A', strtotime($notification->created_at)) }}</div>
+                    </a>
+                @endforeach
+
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                <a href="{{ url('admin/notification') }}" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li>
 

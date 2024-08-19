@@ -35,6 +35,9 @@
                                     <label>Id : <span style="font-weight: normal;">{{ $getRecord->id }}</span></label>
                                 </div>
                                 <div class="form-group">
+                                    <label>Order Number : <span style="font-weight: normal;">{{ $getRecord->order_number }}</span></label>
+                                </div>
+                                <div class="form-group">
                                     <label>Transaction Id : <span
                                             style="font-weight: normal;">{{ $getRecord->transaction_id }}</span></label>
                                 </div>

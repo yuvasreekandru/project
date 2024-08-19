@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Notification;
+
 use Auth;
 use Mail;
 use App\Mail\OrderStatusMail;
@@ -18,8 +20,12 @@ class OrderController extends Controller
         return view("admin.orders.list", $data);
     }
 
-    public function order_details($id)
+    public function order_details($id, Request $req)
     {
+        if(!empty($req->noti_id))
+        {
+            Notification::updateReadNotification($req->noti_id);
+        }
         $data['getRecord'] = Order::getSingle($id);
         $data['header_title'] = "Order Details";
         return view("admin.orders.details", $data);
@@ -32,6 +38,13 @@ class OrderController extends Controller
         $getOrder->save();
 
         Mail::to($getOrder->email)->send(new OrderStatusMail($getOrder));
+         // notification message to home side
+
+         $user_id = $getOrder->user_id;
+         $url = url('user/orders');
+         $message = "Your Order Status Updated #".$getOrder->order_number;
+         Notification::insertRecord($user_id, $url, $message);
+         // end notification message to home side
 
         $json['message'] = 'Status successfully updated';
 
