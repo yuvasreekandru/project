@@ -30,6 +30,12 @@ class Notification extends Model
         ->orderBy('id','desc')
         ->paginate(20);
     }
+    static public function getRecordUser($user_id)
+    {
+        return Notification::where('user_id','=', $user_id)
+        ->orderBy('id','desc')
+        ->paginate(20);
+    }
     static public function getUnreadNotification()
     {
         return Notification::where('is_read','=', 0)
@@ -37,6 +43,14 @@ class Notification extends Model
         ->orderBy('id','desc')
         ->get();
     }
+    static public function getUnreadNotificationCount($user_id)
+    {
+        return Notification::where('is_read','=', 0)
+        ->where('user_id','=', $user_id)
+        ->orderBy('id','desc')
+        ->count();
+    }
+
     static public function updateReadNotification($id)
     {
         $getRecord = Notification::getSingle($id);

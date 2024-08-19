@@ -180,6 +180,8 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('user/edit-profile', [UserController::class, 'edit_profile']);
     Route::post('user/edit-profile', [UserController::class, 'update_profile']);
 
+    Route::get('user/notifications', [UserController::class, 'notifications']);
+
     Route::get('user/change-password', [UserController::class, 'change_password']);
     Route::post('user/change-password', [UserController::class, 'update_password']);
 

@@ -13,6 +13,13 @@
                 class="nav-link @if (Request::segment(2) == 'edit-profile') active @endif">Edit Profile</a>
         </li>
         <li class="nav-item">
+            @php
+                $getUnreadNotificationCount = App\Models\Notification::getUnreadNotificationCount(Auth::user()->id);
+            @endphp
+            <a href="{{ url('user/notifications') }}"
+                class="nav-link @if (Request::segment(2) == 'notifications') active @endif">Notifications ({{ $getUnreadNotificationCount }})</a>
+        </li>
+        <li class="nav-item">
             <a href="{{ url('user/change-password') }}"
                 class="nav-link @if (Request::segment(2) == 'change-password') active @endif">Change Password</a>
         </li>
