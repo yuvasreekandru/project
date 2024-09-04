@@ -52,7 +52,6 @@
                                                         <img src="{{ $value->getImage() }}" height="40px" alt="">
                                                     @endif
                                                 </td>
-                                                <td>{{ $value->title }}</td>
                                                 <td>{{ $value->button_link }}</td>
                                                 <td>{{ $value->status == 0 ? 'Active' : 'InActive' }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($value->created_at)) }}</td>

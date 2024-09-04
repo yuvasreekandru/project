@@ -19,13 +19,12 @@ return new class extends Migration
             $table->integer('category_id')->nullable();
             $table->integer('sub_category_id')->nullable();
             $table->integer('brand_id')->nullable();
-
             $table->double('old_price')->default(0);
             $table->double('price')->default(0);
-            $table->string('short_description')->nullable();
-            $table->string('description')->nullable();
-            $table->string('additional_information')->nullable();
-            $table->string('shipping_returns')->nullable();
+            $table->longText('short_description')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('additional_information')->nullable();
+            $table->longText('shipping_returns')->nullable();
             $table->tinyinteger('is_trendy')->default(0);
             $table->tinyinteger('status')->default(0)->comment('0:active,1:inactive');
             $table->tinyinteger('is_delete')->default(0)->comment('0:not,1:deleted');

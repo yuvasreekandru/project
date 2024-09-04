@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('product_id')->nullable();
             $table->string('name')->nullable();
             $table->float('price')->default(0);
+            $table->integer('stock_qty')->default(0);
             $table->timestamps();
         });
     }

@@ -8,7 +8,9 @@
     @endcomponent
 
     <p>In case you have any issue recovering your password,please contact us.</p>
-
+    @php
+        $getSetting = App\Models\SystemSetting::getSingle();
+    @endphp
     Thanks,<br>
-    {{ config('app.name') }}
+    {{ $getSetting->website_name }}
 @endcomponent

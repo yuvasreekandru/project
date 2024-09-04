@@ -24,7 +24,7 @@
                 <div class="container">
 
                     @include('layouts.message')
-                    
+
                     @if (!empty(Cart::content()->count()))
                         <div class="row">
                             <div class="col-lg-9">
@@ -63,8 +63,35 @@
                                                                 </figure>
 
                                                                 <h3 class="product-title">
-                                                                    <a
-                                                                        href="{{ url($getCartProduct->slug) }}">{{ $getCartProduct->title }}</a>
+                                                                    <a style="margin-bottom:10px;display:block;" href="{{ url($getCartProduct->slug) }}">{{ $getCartProduct->title }}
+                                                                    </a>
+                                                                @php
+                                                                    $color_id= $cart->options->color_id;
+                                                                @endphp
+                                                                @if (!empty($color_id))
+                                                                    @php
+                                                                        $getColor = App\Models\Color::getSingle(
+                                                                            $color_id,
+                                                                        );
+
+                                                                    @endphp
+                                                                    <div><b>Color:</b> {{ $getColor->name }}</div>
+
+                                                                @endif
+                                                                    @php
+                                                                        $size_id = $cart->options->size_id;
+                                                                    @endphp
+                                                                    @if (!empty($size_id))
+                                                                        @php
+                                                                            $getSize = App\Models\ProductSize::getSingle(
+                                                                                $size_id,
+                                                                            );
+
+                                                                        @endphp
+                                                                        <div><b>Size:</b> {{ $getSize->name }}
+                                                                            (${{ number_format($getSize->price, 2) }})</div>
+                                                                    @endif
+
                                                                 </h3><!-- End .product-title -->
                                                             </div><!-- End .product -->
                                                         </td>

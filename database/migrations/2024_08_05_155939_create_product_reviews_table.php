@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('order_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('rating')->default(0);
-            $table->string('review')->nullable();
+            $table->text('review')->nullable();
             $table->timestamps();
         });
     }
