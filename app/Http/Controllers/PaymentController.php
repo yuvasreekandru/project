@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\DiscountCode;
 use App\Models\ShippingCharge;
+use App\Models\PaymentSetting;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Order;
@@ -98,11 +99,10 @@ class PaymentController extends Controller
         $data['meta_description'] = '';
         $data['meta_keywords'] = '';
         $data['getShipping'] = ShippingCharge::getRecordActive();
-
+        $data['getPaymentSetting'] = PaymentSetting::getSingle();
 
         return view("payment.checkout", $data);
     }
-
     public function apply_discount_code(Request $req)
     {
         $getDiscount = DiscountCode::checkDiscount($req->discount_code);
@@ -263,6 +263,9 @@ class PaymentController extends Controller
             $order_id = base64_decode($req->order_id);
             $getOrder = Order::getSingle($order_id);
             if (!empty($getOrder)) {
+
+                $getPaymentSetting = PaymentSetting::getSingle();
+
                 if (!empty($getOrder->payment_method == 'cash')) {
                     $getOrder->is_payment = 1;
                     $getOrder->save();
@@ -303,7 +306,7 @@ class PaymentController extends Controller
                             ]
                         ],
                     ]);
-                    // dd($response);
+                    // // dd($response);
                     if (isset($response['id']) && $response['id'] != null) {
                         // redirect to approve href
                         foreach ($response['links'] as $links) {
@@ -317,8 +320,30 @@ class PaymentController extends Controller
 
                     }
 
+                    // $query = array();
+                    // $query['business'] = $getPaymentSetting->paypal_id;
+                    // $query['cmd'] = '_xclick';
+                    // $query['item_name'] = 'E-commerce';
+                    // $query['no_shipping'] = '1';
+                    // $query['item_number'] = $getOrder->id;
+                    // $query['amount'] = $getOrder->total_amount;
+                    // $query['currency_code'] = 'USD';
+                    // $query['cancel_return'] = url('checkout');
+                    // $query['return'] = url('paypal/success_payment');
+
+                    // $query_string = http_build_query($query);
+                    // if($getPaymentSetting->paypal_status == 'live')
+                    // {
+                    //     header('Location: https://www.paypal.com/cgi-bin/webscr?' . $query_string);
+                    // }
+                    // else
+                    // {
+                    //     header('Location: https://www.sandbox.paypal.com/cgi-bin/webscr?' . $query_string);
+                    // }
+                    // exit();
+
                 } elseif (!empty($getOrder->payment_method == 'stripe')) {
-                    Stripe::setApikey(env('STRIPE_SECRET'));
+                    Stripe::setApikey($getPaymentSetting->stripe_secret_key);
                     $finalprice = $getOrder->total_amount * 100;
 
                     $session = \Stripe\Checkout\Session::create([
@@ -349,7 +374,7 @@ class PaymentController extends Controller
 
                     Session::put('stripe_session_id', $session['id']);
 
-                    $data['setPublicKey'] = env('STRIPE_KEY');
+                    $data['setPublicKey'] = $getPaymentSetting->stripe_public_key;
 
                     return view('payment.stripe_charge', $data);
 

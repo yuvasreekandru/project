@@ -124,6 +124,13 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/setting/home-settings', [PagesController::class, 'home_settings'])->name('setting.home-settings');
     Route::post('admin/setting/home-settings', [PagesController::class, 'update_home_settings']);
 
+    Route::get('admin/setting/smtp-settings', [PagesController::class, 'smtp_settings'])->name('setting.smtp-settings');
+    Route::post('admin/setting/smtp-settings', [PagesController::class, 'update_smtp_settings']);
+
+
+    Route::get('admin/setting/payment-settings', [PagesController::class, 'payment_settings'])->name('setting.payment-settings');
+    Route::post('admin/setting/payment-settings', [PagesController::class, 'update_payment_settings']);
+
                         // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
     Route::get('admin/contact-us/delete/{id}', [PagesController::class, 'contact_delete']);

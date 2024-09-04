@@ -187,26 +187,31 @@
                                     <input type="hidden" id="PayableTotal"
                                         value="{{ number_format(Cart::subtotal(), 2) }}">
                                     <div class="accordion-summary" id="accordion-payment">
+                                        @if (!empty($getPaymentSetting->is_cash_delivery))
 
-                                        <div class="custom-control custom-radio" style="margin-top:0px;">
-                                            <input type="radio" required id="cashOnDelivery" name="payment_method"
-                                                value="cash" class="custom-control-input">
-                                            <label class="custom-control-label" for="cashOnDelivery">Cash on
-                                                delivery</label>
-                                        </div><!-- End .custom-control -->
+                                            <div class="custom-control custom-radio" style="margin-top:0px;">
+                                                <input type="radio" required id="cashOnDelivery" name="payment_method"
+                                                    value="cash" class="custom-control-input">
+                                                <label class="custom-control-label" for="cashOnDelivery">Cash on
+                                                    delivery</label>
+                                            </div><!-- End .custom-control -->
+                                        @endif
+                                        @if (!empty($getPaymentSetting->is_paypal))
+                                            <div class="custom-control custom-radio" style="margin-top:0px;">
+                                                <input type="radio" required id="paypal" name="payment_method"
+                                                    value="paypal" class="custom-control-input">
+                                                <label class="custom-control-label" for="paypal">PayPal</label>
+                                            </div><!-- End .custom-control -->
+                                        @endif
+                                        @if (!empty($getPaymentSetting->is_stripe))
+                                            <div class="custom-control custom-radio" style="margin-top:0px;">
+                                                <input type="radio" required id="creditCard" name="payment_method"
+                                                    value="stripe" class="custom-control-input">
+                                                <label class="custom-control-label" for="creditCard">Credit Card
+                                                    (Stripe)</label>
 
-                                        <div class="custom-control custom-radio" style="margin-top:0px;">
-                                            <input type="radio" required id="paypal" name="payment_method"
-                                                value="paypal" class="custom-control-input">
-                                            <label class="custom-control-label" for="paypal">PayPal</label>
-                                        </div><!-- End .custom-control -->
-                                        <div class="custom-control custom-radio" style="margin-top:0px;">
-                                            <input type="radio" required id="creditCard" name="payment_method"
-                                                value="stripe" class="custom-control-input">
-                                            <label class="custom-control-label" for="creditCard">Credit Card
-                                                (Stripe)</label>
-
-                                        </div><!-- End .custom-control -->
+                                            </div><!-- End .custom-control -->
+                                        @endif
 
                                     </div><!-- End .accordion -->
 

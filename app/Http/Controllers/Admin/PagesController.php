@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentSetting;
 use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\SystemSetting;
 use App\Models\ContactUs;
 use App\Models\HomeSetting;
 use App\Models\Notification;
+use App\Models\SMTP;
+
 
 
 use Str;
@@ -214,5 +217,50 @@ class PagesController extends Controller
 
     }
 
+    public function smtp_settings()
+    {
+        $data['getRecord'] = SMTP::getSingle();
+        $data['header_title'] = "SMTP Settings";
+        return view("admin.setting.smtp-settings", $data);
+    }
+    public function update_smtp_settings(Request $req)
+    {
+        $save = Smtp::getSingle();
+        $save->name = trim($req->name);
+        $save->mail_mailer = trim($req->mail_mailer);
+        $save->mail_host = trim($req->mail_host);
+        $save->mail_port = trim($req->mail_port);
+        $save->mail_username = trim($req->mail_username);
+        $save->mail_password = trim($req->mail_password);
+        $save->mail_encryption = trim($req->mail_encryption);
+        $save->mail_from_address = trim($req->mail_from_address);
+
+        $save->save();
+
+        return redirect()->back()->with("success", "SMTP Setting successfully updated");
+
+    }
+    public function payment_settings()
+    {
+        $data['getRecord'] = PaymentSetting::getSingle();
+        $data['header_title'] = "Payment Settings";
+        return view("admin.setting.payment-settings", $data);
+    }
+    public function update_payment_settings(Request $req)
+    {
+        $save = PaymentSetting::getSingle();
+        $save->paypal_id = trim($req->paypal_id );
+        $save->paypal_status  = trim($req->paypal_status );
+        $save->stripe_public_key = trim($req->stripe_public_key);
+        $save->stripe_secret_key = trim($req->stripe_secret_key);
+        $save->is_cash_delivery = !empty($req->is_cash_delivery) ? 1 : 0;
+        $save->is_paypal = !empty($req->is_paypal) ? 1 : 0;
+        $save->is_stripe = !empty($req->is_stripe) ? 1 : 0;
+
+        $save->save();
+
+        return redirect()->back()->with("success", "Payment Setting successfully updated");
+
+    }
 
 }

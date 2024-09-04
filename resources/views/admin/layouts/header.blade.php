@@ -264,24 +264,6 @@
                 </a>
                </li>
                <li class="nav-item">
-                <a href="{{ route('setting.system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
-
-                    <i class="nav-icon fas fa-list-alt"></i>
-                    <p>
-                        System Settings
-                    </p>
-                </a>
-               </li>
-               <li class="nav-item">
-                <a href="{{ route('setting.home-settings') }}" class="nav-link @if (Request::segment(2) == 'home-settings') active @endif">
-
-                    <i class="nav-icon fas fa-list-alt"></i>
-                    <p>
-                        Home Settings
-                    </p>
-                </a>
-               </li>
-               <li class="nav-item">
                 <a href="{{ route('slider.list') }}" class="nav-link @if (Request::segment(2) == 'slider') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
@@ -305,6 +287,42 @@
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
                         Contact Us
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        System Settings
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.home-settings') }}" class="nav-link @if (Request::segment(2) == 'home-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Home Settings
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.smtp-settings') }}" class="nav-link @if (Request::segment(2) == 'smtp-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        SMTP Settings
+                    </p>
+                </a>
+               </li>
+               <li class="nav-item">
+                <a href="{{ route('setting.payment-settings') }}" class="nav-link @if (Request::segment(2) == 'payment-settings') active @endif">
+
+                    <i class="nav-icon fas fa-list-alt"></i>
+                    <p>
+                        Payment Settings
                     </p>
                 </a>
                </li>
