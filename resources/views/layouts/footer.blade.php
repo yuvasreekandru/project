@@ -70,7 +70,7 @@
                         <ul class="widget-list">
                             <li><a href="{{ url('cart') }}">View Cart</a></li>
                             <li><a href="{{ url('checkout') }}">Checkout</a></li>
-                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="{{ url('user/notifications') }}">Track My Order</a></li>
                         </ul><!-- End .widget-list -->
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-6 col-lg-3 -->

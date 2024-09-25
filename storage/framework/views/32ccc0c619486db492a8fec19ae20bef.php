@@ -70,7 +70,7 @@
                         <ul class="widget-list">
                             <li><a href="<?php echo e(url('cart')); ?>">View Cart</a></li>
                             <li><a href="<?php echo e(url('checkout')); ?>">Checkout</a></li>
-                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="<?php echo e(url('user/notifications')); ?>">Track My Order</a></li>
                         </ul><!-- End .widget-list -->
                     </div><!-- End .widget -->
                 </div><!-- End .col-sm-6 col-lg-3 -->
