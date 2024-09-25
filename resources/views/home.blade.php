@@ -181,8 +181,9 @@
                                 {{-- {{ dd($totalQty) }} --}}
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
-
-                                        @if ($value->p_type == 'Sale' && $totalQty)
+                                        @if ($value->p_type == 'Normal' && $totalQty)
+                                            <span></span>
+                                        @elseif ($value->p_type == 'Sale' && $totalQty)
                                             <span style="color:#fff;background-color:rgba(255, 0, 0, 0.877);"
                                                 class="product-label"> Sale
                                                 {{ round((($value->old_price - $value->price) / (($value->old_price + $value->price) / 2)) * 100, 0) }}%</span>
