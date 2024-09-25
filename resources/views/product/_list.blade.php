@@ -4,31 +4,43 @@
             @php
                 $getProductImage = $value->getImageSingle($value->id);
             @endphp
+            @php
+                $totalQty = App\Models\ProductSize::where('product_id', '=', $value->id)->sum('stock_qty');
+
+            @endphp
             <div class="col-12 @if (!empty($is_home)) col-md-3 col-lg-3 @else col-md-4 col-lg-4 @endif ">
                 <div class="product product-7 text-center">
                     <figure class="product-media">
+                        @if ($value->product_type && $value->sale_type)
+                            <span style="color:#fff;background-color:rgba(255, 0, 0, 0.877);"
+                                class="product-label">{{ $value->sale_type }} </span>
+                        @elseif ($value->product_type)
+                            <span class="product-label label-new">{{ $value->product_type }} </span>
+                        @elseif ($value->sale_type)
+                            <span style="color:#fff;background-color:rgba(255, 0, 0, 0.877);"
+                                class="product-label ">{{ $value->sale_type }} </span>
+                        @endif
                         <a href="{{ url($value->slug) }}">
                             @if (!empty($getProductImage) && !empty($getProductImage->getLogo()))
-                                <img style="height:280px; width:100%;"
-                                    src="{{ $getProductImage->getLogo() }}"
+                                <img style="height:280px; width:100%;" src="{{ $getProductImage->getLogo() }}"
                                     alt="{{ $value->title }}" class="product-image">
                             @endif
                         </a>
 
                         <div class="product-action-vertical">
                             @if (!empty(Auth::check()))
-
-                                        <a href="javascript:;" class="btn-product-icon btn-wishlist btn-expandable
+                                <a href="javascript:;"
+                                    class="btn-product-icon btn-wishlist btn-expandable
                                         add_to_wishlist add-to-wishlist{{ $value->id }}
-                                        {{!empty($value->checkWishlist($value->id)) ? 'btn-wishlist-add' : '' }}"
-                                        title="Wishlist" id={{ $value->id }}><span>add to wishlist
-                                            </span></a>
-                                    @else
-                                        <a href="#signin-modal" data-toggle="modal" class="btn-product-icon btn-wishlist btn-expandable"
-                                            title="Wishlist"><span>add to wishlist </span>
-                                        </a>
-
-                                    @endif
+                                        {{ !empty($value->checkWishlist($value->id)) ? 'btn-wishlist-add' : '' }}"
+                                    title="Wishlist" id={{ $value->id }}><span>add to wishlist
+                                    </span></a>
+                            @else
+                                <a href="#signin-modal" data-toggle="modal"
+                                    class="btn-product-icon btn-wishlist btn-expandable" title="Wishlist"><span>add to
+                                        wishlist </span>
+                                </a>
+                            @endif
 
                         </div><!-- End .product-action-vertical -->
 
@@ -39,15 +51,22 @@
                             <a
                                 href="{{ url($value->category_slug . '/' . $value->sub_category_slug) }}">{{ $value->sub_category_name }}</a>
                         </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a
-                                href="{{ url($value->slug) }}">{{ $value->title }}</a></h3>
+                        <h3 class="product-title"><a href="{{ url($value->slug) }}">{{ $value->title }}</a></h3>
                         <!-- End .product-title -->
                         <div class="product-price">
-                            ${{ number_format($value->price, 2) }}
-                        </div><!-- End .product-price -->
+                            @if ($value->old_price > $value->price)
+                                <div style="text-decoration: line-through;" class="mr-2">
+                                    ${{ number_format($value->old_price, 2) }}
+                                </div><!-- End .product-price -->
+                            @endif
+                            <div>
+                                ${{ number_format($value->price, 2) }}
+                            </div><!-- End .product-price -->
+                        </div>
                         <div class="ratings-container">
                             <div class="ratings">
-                                <div class="ratings-val" style="width: {{ $value->getReviewRating($value->id) }}%;"></div>
+                                <div class="ratings-val" style="width: {{ $value->getReviewRating($value->id) }}%;">
+                                </div>
                                 <!-- End .ratings-val -->
                             </div><!-- End .ratings -->
                             <span class="ratings-text">( {{ $value->getTotalReview() }} Reviews )</span>
@@ -60,5 +79,3 @@
 
     </div><!-- End .row -->
 </div><!-- End .products -->
-
-

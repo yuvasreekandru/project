@@ -90,7 +90,23 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Product Type<span style="color: red"></span></label>
+                                                <select class="form-control" value="" name="product_type_id"
+                                                 placeholder="Product Type">
+                                                    <option value="">Select</option>
+                                                    @foreach ($getProductType as $p_type)
+                                                        @if (!empty($p_type->product_type))
+                                                            <option
+                                                            {{ $product->product_type_id == $p_type->id ? 'selected' : '' }}
+                                                            value="{{ $p_type->id }}">{{ $p_type->product_type }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Trendy Product <span style="color: red">*</span></label>
                                                 <div>
@@ -152,10 +168,32 @@
                                                             <tr>
                                                                 <th>Name</th>
                                                                 <th>Price ($)</th>
+                                                                <th>Stock Qty</th>
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="appendSize">
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" class="form-control"
+                                                                        name="size[100][name]" id=""
+                                                                        placeholder="Name">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control"
+                                                                        name="size[100][price]" id=""
+                                                                        placeholder="Price">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control"
+                                                                        name="size[100][stock_qty]" id=""
+                                                                        placeholder="Qty">
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary addSize">Add</button>
+                                                                </td>
+                                                            </tr>
                                                             @php
                                                                 $i_s = 1;
                                                             @endphp
@@ -174,6 +212,12 @@
                                                                             id="" placeholder="Price">
                                                                     </td>
                                                                     <td>
+                                                                        <input type="text" class="form-control"
+                                                                        value="{{ $size->stock_qty }}"
+                                                                        name="size[{{ $i_s }}][stock_qty]"
+                                                                        id="" placeholder="Qty">
+                                                                    </td>
+                                                                    <td>
                                                                         <button type="button" id="{{ $i_s }}"
                                                                             class="btn btn-danger deleteSize">Delete</button>
                                                                     </td>
@@ -182,22 +226,7 @@
                                                                     $i_s++;
                                                                 @endphp
                                                             @endforeach
-                                                            <tr>
-                                                                <td>
-                                                                    <input type="text" class="form-control"
-                                                                        name="size[100][name]" id=""
-                                                                        placeholder="Name">
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text" class="form-control"
-                                                                        name="size[100][price]" id=""
-                                                                        placeholder="Price">
-                                                                </td>
-                                                                <td>
-                                                                    <button type="button"
-                                                                        class="btn btn-primary addSize">Add</button>
-                                                                </td>
-                                                            </tr>
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -302,7 +331,8 @@
 @section('script')
     <!-- summernote -->
     <script src="{{ asset('AdminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('AdminLTE/plugins/jquery-ui.js') }}"></script>
+    <script src="{{asset('AdminLTE/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+
 
     {{-- tinymce --}}
     {{-- <script src="{{asset('AdminLTE/tinymce-jquery.min.js')}}"></script> --}}
@@ -347,7 +377,7 @@
         //         ],
         //         toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help'
         //       });
-        var i = 100;
+        var i = 101;
         $('body').delegate('.addSize', 'click', function() {
             var html = '<tr id="deleteSize' + i + '">\n\
                                                     <td>\n\
@@ -355,6 +385,9 @@
                                                     </td>\n\
                                                     <td>\n\
                                                         <input type="text" class="form-control" name="size[' + i + '][price]" placeholder="Price" id="">\n\
+                                                    </td>\n\
+                                                    <td>\n\
+                                                        <input type="text" class="form-control" name="size[' + i + '][stock_qty]" placeholder="Qty" id="">\n\
                                                     </td>\n\
                                                     <td>\n\
                                                         <button type="button" id="' + i + '" class="btn btn-danger deleteSize">Delete</button>\n\

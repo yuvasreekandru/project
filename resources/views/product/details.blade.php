@@ -66,10 +66,15 @@
                                         <div class="ratings-val" style="width: {{ $getProduct->getReviewRating($getProduct->id) }}%;"></div><!-- End .ratings-val -->
                                     </div><!-- End .ratings -->
 
-                                    <a class="ratings-text" href="#product-review-link" id="review-link">( {{ $getProduct->getTotalReview() }} Reviews )</a>
+                                    <a class="ratings-text" href="#product-review-link" id="review-link">(
+                                        {{ $getProduct->getTotalReview() }} Reviews )</a>
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
+                                    @if ($getProduct->old_price > $getProduct->price)
+                                        <span style="text-decoration: line-through;"
+                                            class="mr-2" id="oldPrice">${{ number_format($getProduct->old_price, 2) }}</span>
+                                    @endif
                                     $<span id="getTotalPrice">{{ number_format($getProduct->price, 2) }}</span>
                                 </div><!-- End .product-price -->
 
@@ -99,18 +104,21 @@
                                     @if (!empty($getProduct->getSize->count()))
                                         <div class="details-filter-row details-row-size">
                                             <label for="size">Size:</label>
-                                            <div class="select-custom">
+                                            <div class="select-custom sizeQty">
                                                 <select name="size_id" id="size" required
                                                     class="form-control getSizePrice">
                                                     <option data-price="0" value="#" selected="selected">Select a size
                                                     </option>
                                                     @foreach ($getProduct->getSize as $size)
+                                                        <!-- if stock available -->
+                                                        @if ($size->stock_qty > 0)
                                                         <option data-price="{{ !empty($size->price) ? $size->price : 0 }}"
                                                             value="{{ $size->id }}">{{ $size->name }}
-                                                            @if (!empty($size->price))
+                                                            {{-- @if (!empty($size->price))
                                                                 (${{ number_format($size->price, 2) }})
-                                                            @endif
+                                                            @endif --}}
                                                         </option>
+                                                        @endif
                                                     @endforeach
 
                                                 </select>
@@ -127,6 +135,27 @@
                                                 data-decimals="0" required>
                                         </div><!-- End .product-details-quantity -->
                                     </div><!-- End .details-filter-row -->
+                                    <div>
+                                        @php
+                                            $totalStockQty = App\Models\ProductSize::where(
+                                                'product_id',
+                                                '=',
+                                                $getProduct->id,
+                                            )->sum('stock_qty');
+
+                                        @endphp
+                                        {{-- {{ dd($getProduct->id)}} --}}
+                                        {{-- {{ dd($totalStockQty)}} --}}
+
+                                        @if ($totalStockQty < 1)
+                                            <!-- if stock available -->
+                                            <p class="product-content">Availability: <span style="color:red;">Out Of
+                                                    Stock</span></p>
+                                        @else
+                                        <p class="product-content">Availability: <span style="color:#c96;">In
+                                            Stock</span></p>
+                                        @endif
+                                    </div>
 
                                     <div class="product-details-action">
                                         <button type="submit" style="background: #fff;color:#c96;"
@@ -139,8 +168,8 @@
                                                     title="Wishlist" id={{ $getProduct->id }}><span>Add to
                                                         Wishlist</span></a>
                                             @else
-                                                <a href="#signin-modal" data-toggle="modal" class="btn-product btn-wishlist"
-                                                    title="Wishlist"><span>Add to
+                                                <a href="#signin-modal" data-toggle="modal"
+                                                    class="btn-product btn-wishlist" title="Wishlist"><span>Add to
                                                         Wishlist</span></a>
                                             @endif
 
@@ -194,7 +223,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
-                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews ({{ $getProduct->getTotalReview() }})</a>
+                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews
+                                ({{ $getProduct->getTotalReview() }})</a>
                         </li>
                     </ul>
                 </div><!-- End .container -->
@@ -241,7 +271,8 @@
                                                 <h4><a href="#">{{ $review->name }}.</a></h4>
                                                 <div class="ratings-container">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: {{ $review->getPercent() }}%;"></div>
+                                                        <div class="ratings-val"
+                                                            style="width: {{ $review->getPercent() }}%;"></div>
                                                         <!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
                                                 </div><!-- End .rating-container -->
@@ -336,8 +367,15 @@
                                     <a href="{{ url($value->slug) }}">{{ $value->title }}</a>
                                 </h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    ${{ number_format($value->price, 2) }}
-                                </div><!-- End .product-price -->
+                                    @if ($value->old_price > $value->price)
+                                        <div style="text-decoration: line-through;" class="mr-2">
+                                            ${{ number_format($value->old_price, 2) }}
+                                        </div><!-- End .product-price -->
+                                    @endif
+                                    <div>
+                                        ${{ number_format($value->price, 2) }}
+                                    </div><!-- End .product-price -->
+                                </div>
                                 <div class="ratings-container">
                                     <div class="ratings">
                                         <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
@@ -365,10 +403,21 @@
 
             var price = $('option:selected', this).attr('data-price');
             var product_price = '{{ $getProduct->price }}';
+            var old_price = '{{ $getProduct->old_price}}';
 
-            var total = parseFloat(price) + parseFloat(product_price);
+            if(price > old_price)
+            {
+                var total = parseFloat(price);
+                $('#oldPrice').hide();
+                $('#getTotalPrice').html(total.toFixed(2));
 
-            $('#getTotalPrice').html(total.toFixed(2));
+            }
+            else
+            {
+                var total = parseFloat(price);
+                $('#getTotalPrice').html(total.toFixed(2));
+            }
+
 
 
 

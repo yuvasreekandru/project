@@ -154,6 +154,7 @@ class ProductController extends Controller
     public function getFilterProductAjax(Request $req)
     {
         $getProduct = Product::getProduct();
+        // $getSize = Product::getSize();
 
         $page = 0;
         if(!empty($getProduct->nextPageUrl() )) {
@@ -172,6 +173,7 @@ class ProductController extends Controller
             "page" => $page,
             "success" => view("product._list",[
                 "getProduct" => $getProduct,
+                // "getSize" => $getSize,
             ])->render(),
         ], 200);
 

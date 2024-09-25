@@ -65,7 +65,7 @@ class PaymentController extends Controller
     public function add_to_cart(Request $req)
     {
         $getProduct = Product::getSingle($req->product_id);
-        $total = $getProduct->price;
+        $total = 0;
         if (!empty($req->size_id)) {
             $size_id = $req->size_id;
             $getSize = ProductSize::getSingle($size_id);
@@ -90,7 +90,7 @@ class PaymentController extends Controller
             ]
         ]);
 
-        return redirect()->back()->with('success',"Item successfully added to cart");
+        return redirect()->back()->with('success', "Item successfully added to cart");
     }
 
     public function checkout(Request $req)
@@ -195,7 +195,7 @@ class PaymentController extends Controller
             if (!empty($user_id)) {
                 $order->user_id = trim($user_id);
             }
-            $order->order_number = mt_rand(100000000,999999999);
+            $order->order_number = mt_rand(100000000, 999999999);
             $order->first_name = trim($req->first_name);
             $order->last_name = trim($req->last_name);
             $order->company_name = trim($req->company_name);
@@ -269,6 +269,17 @@ class PaymentController extends Controller
                 if (!empty($getOrder->payment_method == 'cash')) {
                     $getOrder->is_payment = 1;
                     $getOrder->save();
+                    foreach (Cart::content() as $key => $cart) {
+                        $size_id = $cart->options->size_id;
+                        // get product stock
+                        $getSize = ProductSize::getSingle($size_id);
+
+                        $newStock = $getSize->stock_qty - $cart->qty;
+
+                        // updated product stock
+
+                        ProductSize::where(['product_id'=> $getSize['product_id'] ,'name'=>$getSize['name']])->update(['stock_qty'=>$newStock]);
+                    }
 
                     try {
                         //code...
@@ -280,8 +291,8 @@ class PaymentController extends Controller
                     // notification message to admin side
 
                     $user_id = 1;
-                    $url = url('admin/orders/details/'.$getOrder->id);
-                    $message = "New Order Placed #".$getOrder->order_number;
+                    $url = url('admin/orders/details/' . $getOrder->id);
+                    $message = "New Order Placed #" . $getOrder->order_number;
                     Notification::insertRecord($user_id, $url, $message);
                     // end notification message to admin side
                     Cart::destroy();
@@ -312,12 +323,13 @@ class PaymentController extends Controller
                             ]
                         ],
                     ]);
-                    // // dd($response);
+                    // dd($response);
                     if (isset($response['id']) && $response['id'] != null) {
                         // redirect to approve href
                         foreach ($response['links'] as $links) {
 
                             if ($links['rel'] == 'approve') {
+
                                 return redirect()->away($links['href']);
 
                             }
@@ -401,14 +413,27 @@ class PaymentController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($req['token']);
-
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             $getOrder = Order::getSingle($response['purchase_units'][0]['reference_id']);
             if (!empty($getOrder)) {
                 $getOrder->is_payment = 1;
                 $getOrder->transaction_id = $response['id'];
                 $getOrder->payment_data = json_encode($response);
+                // dd($getOrder);
+
                 $getOrder->save();
+                foreach (Cart::content() as $key => $cart) {
+                    $size_id = $cart->options->size_id;
+                    // get product stock
+                    $getSize = ProductSize::getSingle($size_id);
+
+                    $newStock = $getSize->stock_qty - $cart->qty;
+
+                    // updated product stock
+
+                    ProductSize::where(['product_id'=> $getSize['product_id'] ,'name'=>$getSize['name']])->update(['stock_qty'=>$newStock]);
+                }
+
                 try {
                     //code...
                     Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
@@ -419,11 +444,12 @@ class PaymentController extends Controller
                 // notification message to admin side
 
                 $user_id = 1;
-                $url = url('admin/orders/details/'.$getOrder->id);
-                $message = "New Order Placed #".$getOrder->order_number;
+                $url = url('admin/orders/details/' . $getOrder->id);
+                $message = "New Order Placed #" . $getOrder->order_number;
                 Notification::insertRecord($user_id, $url, $message);
                 // end notification message to admin side
                 Cart::destroy();
+
                 return redirect('cart')->with('success', "Order successfully placed");
             } else {
                 abort(404);
@@ -445,6 +471,17 @@ class PaymentController extends Controller
             $getOrder->transaction_id = $getData->id;
             $getOrder->payment_data = json_encode($getData);
             $getOrder->save();
+            foreach (Cart::content() as $key => $cart) {
+                $size_id = $cart->options->size_id;
+                // get product stock
+                $getSize = ProductSize::getSingle($size_id);
+
+                $newStock = $getSize->stock_qty - $cart->qty;
+
+                // updated product stock
+
+                ProductSize::where(['product_id'=> $getSize['product_id'] ,'name'=>$getSize['name']])->update(['stock_qty'=>$newStock]);
+            }
             try {
                 //code...
                 Mail::to($getOrder->email)->send(new OrderInvoiceMail($getOrder));
@@ -456,8 +493,8 @@ class PaymentController extends Controller
             // notification message to admin side
 
             $user_id = 1;
-            $url = url('admin/orders/details/'.$getOrder->id);
-            $message = "New Order Placed #".$getOrder->order_number;
+            $url = url('admin/orders/details/' . $getOrder->id);
+            $message = "New Order Placed #" . $getOrder->order_number;
             Notification::insertRecord($user_id, $url, $message);
             // end notification message to admin side
             Cart::destroy();

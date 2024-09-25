@@ -27,20 +27,19 @@
 
         <ul class="posts-list">
             @foreach ($getPopularPosts as $value)
+                <li>
+                    <figure>
+                        <a href="#">
+                            <img src="{{ $value->getImage() }}" alt="{{ $value->title }}">
+                        </a>
+                    </figure>
 
+                    <div>
+                        <span>{{ date('M d,Y', strtotime($value->created_at)) }}</span>
+                        <h4><a href="{{ url('blog/'.$value->slug) }}">{{ $value->title }}</a></h4>
+                    </div>
+                </li>
             @endforeach
-            <li>
-                <figure>
-                    <a href="#">
-                        <img src="{{ $value->getImage() }}" alt="{{ $value->title }}">
-                    </a>
-                </figure>
-
-                <div>
-                    <span>{{ date('M d,Y', strtotime($value->created_at)) }}</span>
-                    <h4><a href="{{ url('blog/'.$value->slug) }}">{{ $value->title }}</a></h4>
-                </div>
-            </li>
 
         </ul><!-- End .posts-list -->
     </div><!-- End .widget -->

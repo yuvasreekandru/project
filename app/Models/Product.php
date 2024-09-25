@@ -60,10 +60,11 @@ class Product extends Model
     }
     static public function getProductTrendy()
     {
-        $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug')
+        $return = Product::select('products.*', 'users.name as created_by_name', 'categories.name as category_name', 'categories.slug as category_slug', 'sub_categories.name as sub_category_name', 'sub_categories.slug as sub_category_slug','product_types.product_type as p_type')
         ->join('users', 'users.id', '=', 'products.created_by')
         ->join('categories', 'categories.id', '=', 'products.category_id')
         ->join('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+        ->join('product_types', 'product_types.id', '=', 'products.product_type_id')
         ->where('products.is_trendy', '=', 1)
         ->where('products.is_delete', '=', 0)
         ->where('products.status', '=', 0)

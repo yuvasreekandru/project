@@ -25,10 +25,12 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->longText('additional_information')->nullable();
             $table->longText('shipping_returns')->nullable();
+            $table->integer('product_type_id')->nullable();
             $table->tinyinteger('is_trendy')->default(0);
             $table->tinyinteger('status')->default(0)->comment('0:active,1:inactive');
             $table->tinyinteger('is_delete')->default(0)->comment('0:not,1:deleted');
             $table->integer('created_by')->nullable();
+
             $table->timestamps();
         });
     }

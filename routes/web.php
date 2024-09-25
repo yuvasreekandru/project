@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ShippingChargeController;
 use App\Http\Controllers\Admin\Ordercontroller;
@@ -91,6 +92,14 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/product/image_delete/{id}', [ProductController::class, 'image_delete']);
     Route::post('admin/product_image_sortable', [ProductController::class, 'product_image_sortable']);
 
+    // ************ Product Type ********** //
+    Route::get('admin/product_type/list', [ProductTypeController::class, 'list'])->name('product_type.list');
+    Route::get('admin/product_type/add', [ProductTypeController::class, 'add'])->name('product_type.add');
+    Route::post('admin/product_type/add', [ProductTypeController::class, 'insert']);
+    Route::get('admin/product_type/edit/{id}', [ProductTypeController::class, 'edit']);
+    Route::post('admin/product_type/edit/{id}', [ProductTypeController::class, 'update']);
+    Route::get('admin/product_type/delete/{id}', [ProductTypeController::class, 'delete']);
+
     // ************ Discount Code ********** //
     Route::get('admin/discount_code/list', [DiscountController::class, 'list'])->name('discount_code.list');
     Route::get('admin/discount_code/add', [DiscountController::class, 'add'])->name('discount_code.add');
@@ -118,18 +127,18 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/pages/edit/{id}', [PagesController::class, 'edit']);
     Route::post('admin/pages/edit/{id}', [PagesController::class, 'update']);
 
-    Route::get('admin/setting/system-settings', [PagesController::class, 'system_settings'])->name('setting.system-settings');
-    Route::post('admin/setting/system-settings', [PagesController::class, 'update_system_settings']);
+    Route::get('admin/system-settings', [PagesController::class, 'system_settings']);
+    Route::post('admin/system-settings', [PagesController::class, 'update_system_settings']);
 
-    Route::get('admin/setting/home-settings', [PagesController::class, 'home_settings'])->name('setting.home-settings');
-    Route::post('admin/setting/home-settings', [PagesController::class, 'update_home_settings']);
+    Route::get('admin/home-settings', [PagesController::class, 'home_settings']);
+    Route::post('admin/home-settings', [PagesController::class, 'update_home_settings']);
 
-    Route::get('admin/setting/smtp-settings', [PagesController::class, 'smtp_settings'])->name('setting.smtp-settings');
-    Route::post('admin/setting/smtp-settings', [PagesController::class, 'update_smtp_settings']);
+    Route::get('admin/smtp-settings', [PagesController::class, 'smtp_settings']);
+    Route::post('admin/smtp-settings', [PagesController::class, 'update_smtp_settings']);
 
 
-    Route::get('admin/setting/payment-settings', [PagesController::class, 'payment_settings'])->name('setting.payment-settings');
-    Route::post('admin/setting/payment-settings', [PagesController::class, 'update_payment_settings']);
+    Route::get('admin/payment-settings', [PagesController::class, 'payment_settings']);
+    Route::post('admin/payment-settings', [PagesController::class, 'update_payment_settings']);
 
                         // ************* Contact Us **************//
     Route::get('admin/contact-us/list', [PagesController::class, 'contactUsList'])->name('contactUs.list');
@@ -205,6 +214,7 @@ Route::group(['middleware' => 'user'], function () {
 
 // ************* Home ********* //
 Route::get('/', [HomeController::class, 'home']);
+Route::get('home', [HomeController::class, 'home']);
 Route::post('recent_arrival_category_product', [HomeController::class, 'recent_arrival_category_product']);
 
 Route::get('contact', [HomeController::class, 'contact']);

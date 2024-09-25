@@ -8,7 +8,6 @@ use App\Models\Notification;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-// use Illuminate\Support\Facades\Mail;
 use Mail;
 use Str;
 use App\Mail\RegisterMail;

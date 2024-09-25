@@ -36,7 +36,7 @@ class HomeController extends Controller
         $data['getProduct'] = Product::getRecentArrivals();
         $data['getProductTrendy'] = Product::getProductTrendy();
 
-
+        
         $data['meta_title'] = $getPage->meta_title;
         $data['meta_description'] = $getPage->meta_description;
         $data['meta_keywords'] = $getPage->meta_keywords;

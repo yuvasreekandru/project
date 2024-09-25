@@ -218,6 +218,15 @@
                        </p>
                    </a>
                </li>
+                <li class="nav-item">
+                    <a href="{{ route('product_type.list') }}" class="nav-link @if (Request::segment(2) == 'product_type') active @endif">
+
+                        <i class="nav-icon fas fa-list-alt"></i>
+                        <p>
+                            Product Type
+                        </p>
+                    </a>
+                </li>
                <li class="nav-item">
                 <a href="{{ route('discount_code.list') }}" class="nav-link @if (Request::segment(2) == 'discount_code') active @endif">
 
@@ -291,7 +300,7 @@
                 </a>
                </li>
                <li class="nav-item">
-                <a href="{{ route('setting.system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
+                <a href="{{ url('admin/system-settings') }}" class="nav-link @if (Request::segment(2) == 'system-settings') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
@@ -300,7 +309,7 @@
                 </a>
                </li>
                <li class="nav-item">
-                <a href="{{ route('setting.home-settings') }}" class="nav-link @if (Request::segment(2) == 'home-settings') active @endif">
+                <a href="{{ url('admin/home-settings') }}" class="nav-link @if (Request::segment(2) == 'home-settings') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
@@ -309,7 +318,7 @@
                 </a>
                </li>
                <li class="nav-item">
-                <a href="{{ route('setting.smtp-settings') }}" class="nav-link @if (Request::segment(2) == 'smtp-settings') active @endif">
+                <a href="{{ url('admin/smtp-settings') }}" class="nav-link @if (Request::segment(2) == 'smtp-settings') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>
@@ -318,7 +327,7 @@
                 </a>
                </li>
                <li class="nav-item">
-                <a href="{{ route('setting.payment-settings') }}" class="nav-link @if (Request::segment(2) == 'payment-settings') active @endif">
+                <a href="{{ url('admin/payment-settings') }}" class="nav-link @if (Request::segment(2) == 'payment-settings') active @endif">
 
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>

@@ -135,7 +135,9 @@
         @if (!empty($getProductTrendy->count()))
             <div class="container">
                 <div class="heading heading-center mb-3">
-                    <h2 class="title-lg">{{ !empty($getHomeSetting->trendy_product_title) ? $getHomeSetting->trendy_product_title : 'Trendy Products' }}</h2><!-- End .title -->
+                    <h2 class="title-lg">
+                        {{ !empty($getHomeSetting->trendy_product_title) ? $getHomeSetting->trendy_product_title : 'Trendy Products' }}
+                    </h2><!-- End .title -->
 
                 </div><!-- End .heading -->
 
@@ -172,8 +174,33 @@
                                 @php
                                     $getProductImage = $value->getImageSingle($value->id);
                                 @endphp
+                                @php
+                                    $totalQty = App\Models\ProductSize::where('product_id', '=', $value->id)->sum('stock_qty');
+
+                                @endphp
+                                {{-- {{ dd($totalQty) }} --}}
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
+
+                                        @if ($value->p_type == 'Sale' && $totalQty)
+                                            <span style="color:#fff;background-color:rgba(255, 0, 0, 0.877);"
+                                                class="product-label"> Sale
+                                                {{ round((($value->old_price - $value->price) / (($value->old_price + $value->price) / 2)) * 100, 0) }}%</span>
+                                        @elseif ($value->p_type == 'New' && $totalQty)
+                                            <span class="product-label label-new">{{ $value->p_type }} </span>
+                                        @elseif ($value->p_type == 'Hot' && $totalQty)
+                                            <span style="color:#fff;background-color:rgba(97, 107, 10, 0.863);"
+                                                class="product-label">{{ $value->p_type }} </span>
+                                        @elseif ($value->p_type == 'Top' && $totalQty)
+                                            <span style="color:#fff;background-color:rgba(0, 140, 255, 0.877);"
+                                                class="product-label ">{{ $value->p_type }} </span>
+
+                                        @else
+                                            <span
+                                                style="color:#fff;background-color:rgba(255, 0, 0, 0.877);"class="product-label">
+                                                Out Of Stock </span>
+                                        @endif
+
                                         <a href="{{ url($value->slug) }}">
                                             @if (!empty($getProductImage) && !empty($getProductImage->getLogo()))
                                                 <img style="height:280px; width:100%;"
@@ -210,8 +237,16 @@
                                                 href="{{ url($value->slug) }}">{{ $value->title }}</a></h3>
                                         <!-- End .product-title -->
                                         <div class="product-price">
-                                            ${{ number_format($value->price, 2) }}
-                                        </div><!-- End .product-price -->
+                                            @if ($value->old_price > $value->price)
+                                                <div style="text-decoration: line-through;" class="mr-2">
+                                                    ${{ number_format($value->old_price, 2) }}
+                                                </div><!-- End .product-price -->
+                                            @endif
+                                            <div>
+                                                ${{ number_format($value->price, 2) }}
+
+                                            </div><!-- End .product-price -->
+                                        </div>
                                         <div class="ratings-container">
                                             <div class="ratings">
                                                 <div class="ratings-val"
@@ -233,7 +268,9 @@
         @endif
         @if (!empty($getCategory->count()))
             <div class="container categories pt-6">
-                <h2 class="title-lg text-center mb-4">{{ !empty($getHomeSetting->shop_category_title) ? $getHomeSetting->shop_category_title : 'Shop by Categories' }}</h2><!-- End .title-lg text-center -->
+                <h2 class="title-lg text-center mb-4">
+                    {{ !empty($getHomeSetting->shop_category_title) ? $getHomeSetting->shop_category_title : 'Shop by Categories' }}
+                </h2><!-- End .title-lg text-center -->
 
                 <div class="row">
                     @foreach ($getCategory as $category)
@@ -241,7 +278,8 @@
                             <div class="col-sm-12 col-lg-4 banners-sm">
                                 <div class="banner banner-display banner-link-anim col-lg-12 col-6">
                                     <a href="{{ $category->slug }}">
-                                        <img src="{{ $category->getImage() }}" alt="{{ $category->name }}">
+                                        <img src="{{ $category->getImage() }}" alt="{{ $category->name }}"
+                                            style="height:280px; width:100%;  object-fit: cover;">
                                     </a>
 
                                     <div class="banner-content banner-content-center">
@@ -269,7 +307,9 @@
 
         <div class="container">
             <div class="heading heading-center mb-6">
-                <h2 class="title">{{ !empty($getHomeSetting->recent_arrival_title) ? $getHomeSetting->recent_arrival_title : 'Recent Arrivals' }}</h2><!-- End .title -->
+                <h2 class="title">
+                    {{ !empty($getHomeSetting->recent_arrival_title) ? $getHomeSetting->recent_arrival_title : 'Recent Arrivals' }}
+                </h2><!-- End .title -->
 
                 <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                     <li class="nav-item">
@@ -321,12 +361,15 @@
                     <div class="col-lg-4 col-sm-6">
                         <div class="icon-box icon-box-card text-center">
                             @if (!empty($getHomeSetting->getPaymentImage()))
-                            <span class="icon-box-icon">
-                                <img src="{{ $getHomeSetting->getPaymentImage() }}" style="width: 50px;" alt="">
-                            </span>
-                        @endif
+                                <span class="icon-box-icon">
+                                    <img src="{{ $getHomeSetting->getPaymentImage() }}" style="width: 50px;"
+                                        alt="">
+                                </span>
+                            @endif
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->payment_delivery_title) ? $getHomeSetting->payment_delivery_title : 'Payment & Delivery' }}</h3><!-- End .icon-box-title -->
+                                <h3 class="icon-box-title">
+                                    {{ !empty($getHomeSetting->payment_delivery_title) ? $getHomeSetting->payment_delivery_title : 'Payment & Delivery' }}
+                                </h3><!-- End .icon-box-title -->
                                 <p>{{ $getHomeSetting->payment_delivery_description }} </p>
                             </div><!-- End .icon-box-content -->
                         </div><!-- End .icon-box -->
@@ -337,11 +380,14 @@
                         <div class="icon-box icon-box-card text-center">
                             @if (!empty($getHomeSetting->getRefundImage()))
                                 <span class="icon-box-icon">
-                                    <img src="{{ $getHomeSetting->getRefundImage() }}" style="width: 50px;" alt="">
+                                    <img src="{{ $getHomeSetting->getRefundImage() }}" style="width: 50px;"
+                                        alt="">
                                 </span>
                             @endif
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->refund_title) ? $getHomeSetting->refund_title : 'Return & Refund' }}</h3><!-- End .icon-box-title -->
+                                <h3 class="icon-box-title">
+                                    {{ !empty($getHomeSetting->refund_title) ? $getHomeSetting->refund_title : 'Return & Refund' }}
+                                </h3><!-- End .icon-box-title -->
                                 <p>{{ $getHomeSetting->refund_description }}</p>
                             </div><!-- End .icon-box-content -->
                         </div><!-- End .icon-box -->
@@ -352,11 +398,14 @@
                         <div class="icon-box icon-box-card text-center">
                             @if (!empty($getHomeSetting->getSupportImage()))
                                 <span class="icon-box-icon">
-                                    <img src="{{ $getHomeSetting->getSupportImage() }}" style="width: 50px;" alt="">
+                                    <img src="{{ $getHomeSetting->getSupportImage() }}" style="width: 50px;"
+                                        alt="">
                                 </span>
                             @endif
                             <div class="icon-box-content">
-                                <h3 class="icon-box-title">{{ !empty($getHomeSetting->support_title) ? $getHomeSetting->support_title : 'Quality Support' }}</h3><!-- End .icon-box-title -->
+                                <h3 class="icon-box-title">
+                                    {{ !empty($getHomeSetting->support_title) ? $getHomeSetting->support_title : 'Quality Support' }}
+                                </h3><!-- End .icon-box-title -->
                                 <p>{{ $getHomeSetting->support_description }}</p>
                             </div><!-- End .icon-box-content -->
                         </div><!-- End .icon-box -->
@@ -369,7 +418,9 @@
         @if (!empty($getBlog->count()))
             <div class="blog-posts pt-7 pb-7" style="background-color: #fafafa;">
                 <div class="container">
-                    <h2 class="title-lg text-center mb-3 mb-md-4">{{ !empty($getHomeSetting->blog_title) ? $getHomeSetting->blog_title : 'Our Blog' }}</h2><!-- End .title-lg text-center -->
+                    <h2 class="title-lg text-center mb-3 mb-md-4">
+                        {{ !empty($getHomeSetting->blog_title) ? $getHomeSetting->blog_title : 'Our Blog' }}</h2>
+                    <!-- End .title-lg text-center -->
 
                     <div class="owl-carousel owl-simple carousel-with-shadow" data-toggle="owl"
                         data-owl-options='{
@@ -393,23 +444,25 @@
                         @foreach ($getBlog as $blog)
                             <article class="entry entry-display">
                                 <figure class="entry-media">
-                                    <a href="{{ url('blog/'.$blog->slug) }}">
-                                        <img src="{{ $blog->getImage() }}" alt="{{ $blog->title }}" style="height: 260px; width: 100%; object-fit: cover;">
+                                    <a href="{{ url('blog/' . $blog->slug) }}">
+                                        <img src="{{ $blog->getImage() }}" alt="{{ $blog->title }}"
+                                            style="height: 260px; width: 100%; object-fit: cover;">
                                     </a>
                                 </figure><!-- End .entry-media -->
 
                                 <div class="entry-body pb-4 text-center">
                                     <div class="entry-meta">
-                                        <a href="#">{{ date('M d,Y',strtotime($blog->created_at)) }}</a>, {{ $blog->getCommentCount() }} Comments
+                                        <a href="#">{{ date('M d,Y', strtotime($blog->created_at)) }}</a>,
+                                        {{ $blog->getCommentCount() }} Comments
                                     </div><!-- End .entry-meta -->
 
                                     <h3 class="entry-title">
-                                        <a href="{{ url('blog/'.$blog->slug) }}">{{ $blog->title }}</a>
+                                        <a href="{{ url('blog/' . $blog->slug) }}">{{ $blog->title }}</a>
                                     </h3><!-- End .entry-title -->
 
                                     <div class="entry-content">
                                         <p>{!! $blog->short_description !!} </p>
-                                        <a href="{{ url('blog/'.$blog->slug) }}" class="read-more">Read More</a>
+                                        <a href="{{ url('blog/' . $blog->slug) }}" class="read-more">Read More</a>
                                     </div><!-- End .entry-content -->
                                 </div><!-- End .entry-body -->
                             </article><!-- End .entry -->
@@ -419,8 +472,8 @@
                 </div><!-- container -->
 
                 <div class="more-container text-center mb-0 mt-3">
-                    <a href="{{ url('blog') }}" class="btn btn-outline-darker btn-more"><span>View more articles</span><i
-                            class="icon-long-arrow-right"></i></a>
+                    <a href="{{ url('blog') }}" class="btn btn-outline-darker btn-more"><span>View more
+                            articles</span><i class="icon-long-arrow-right"></i></a>
                 </div><!-- End .more-container -->
             </div>
         @endif
@@ -433,16 +486,18 @@
                         <div class="col-md-10 col-lg-9 col-xl-8">
                             <div class="row no-gutters flex-column flex-sm-row align-items-sm-center">
                                 <div class="col">
-                                    <h3 class="cta-title text-white">{{ !empty($getHomeSetting->signup_title) ? $getHomeSetting->signup_title : 'Sign Up & Get 10% Off' }}</h3><!-- End .cta-title -->
+                                    <h3 class="cta-title text-white">
+                                        {{ !empty($getHomeSetting->signup_title) ? $getHomeSetting->signup_title : 'Sign Up & Get 10% Off' }}
+                                    </h3><!-- End .cta-title -->
                                     <p class="cta-desc text-white">{{ $getHomeSetting->signup_description }}</p>
                                     <!-- End .cta-desc -->
                                 </div><!-- End .col -->
 
                                 <div class="col-auto">
                                     @if (empty(Auth::check()))
-
-                                        <a href="#signin-modal" data-toggle="modal" class="btn btn-outline-white"><span>SIGN UP</span><i
-                                            class="icon-long-arrow-right"></i></a>
+                                        <a href="#signin-modal" data-toggle="modal"
+                                            class="btn btn-outline-white"><span>SIGN UP</span><i
+                                                class="icon-long-arrow-right"></i></a>
                                     @endif
 
                                 </div><!-- End .col-auto -->

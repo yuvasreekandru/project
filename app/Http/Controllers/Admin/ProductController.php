@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\Color;
 use App\Models\ProductColor;
 use App\Models\Brand;
@@ -67,7 +68,7 @@ class ProductController extends Controller
             $data['getCategory'] = Category::getRecordActive();
             $data['getBrand'] = Brand::getRecordActive();
             $data['getColor'] = Color::getRecordActive();
-
+            $data['getProductType'] = ProductType::getRecord();
             $data['product'] = $product;
 
             $data['getSubCategory'] = SubCategory::getRecordSubCategory($product->category_id);
@@ -90,6 +91,7 @@ class ProductController extends Controller
             $product->sub_category_id = trim($req->sub_category_id);
             $product->brand_id = trim($req->brand_id);
             $product->is_trendy = !empty($req->is_trendy) ? 1 : 0;
+            $product->product_type_id = trim($req->product_type_id);
             $product->price = trim($req->price);
             $product->old_price = trim($req->old_price);
             $product->short_description = trim($req->short_description);
@@ -118,11 +120,12 @@ class ProductController extends Controller
             {
                 foreach ($req->size as $size)
                 {
-                    if(!empty($size["name"]))
+                    if(!empty($size['name']))
                     {
                         $saveSize = new ProductSize();
                         $saveSize->name = $size['name'];
                         $saveSize->price = !empty($size['price']) ? $size['price'] : 0;
+                        $saveSize->stock_qty = !empty($size['stock_qty']) ? $size['stock_qty'] : 0;
                         $saveSize->product_id = $product->id;
                         $saveSize->save();
                     }

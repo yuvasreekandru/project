@@ -96,15 +96,41 @@
                                 </div><!-- End .row -->
                             </div><!-- End .megamenu megamenu-md -->
                         </li>
-                        @php
-                            $getCategoryHeaderMenu = App\Models\Category::getRecordMenuHeader();
-                        @endphp
-                        @foreach ($getCategoryHeaderMenu as $menu)
-                            <li class="{{ (Request::segment(1) == $menu->slug) ? 'active' : '' }}">
-                                <a href="{{ url($menu->slug) }}" class="">{{ $menu->name }}</a>
+                        <li>
+                            <a href="javascript:;" class="sf-with-ul">Pages</a>
 
-                            </li>
-                        @endforeach
+                            <div class="megamenu megamenu-md">
+                                <div class="row no-gutters">
+                                    <div class="col-md-12">
+                                        <div class="menu-col">
+                                            <div class="row">
+                                                @php
+                                                    $getPagesHeader = App\Models\Page::getRecord();
+                                                @endphp
+                                                    <div class="col-md-4">
+                                                        <ul>
+                                                                @foreach ($getPagesHeader as $value)
+                                                                <li><a
+                                                                        href="{{ url($value->slug) }}">{{ $value->title }}</a>
+                                                                </li>
+                                                            @endforeach
+
+                                                        </ul>
+
+                                                    </div><!-- End .col-md-4 -->
+                                            </div><!-- End .row -->
+                                        </div><!-- End .menu-col -->
+                                    </div><!-- End .col-md-12 -->
+
+
+                                </div><!-- End .row -->
+                            </div><!-- End .megamenu megamenu-md -->
+                        </li>
+                        <li class="">
+                            <a href="{{ url('blog') }}" class="">Blog</a>
+
+                        </li>
+
                     </ul><!-- End .menu -->
                 </nav><!-- End .main-nav -->
             </div><!-- End .header-left -->
