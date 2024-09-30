@@ -171,61 +171,65 @@
                     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
-                        <span class="cart-count">{{ Cart::content()->count() }}</span>
+                        @if (!empty(Auth::check()))
+                            <span class="cart-count">{{ Cart::content()->count() }}</span>
+                        @endif
                     </a>
-                    @if (!empty(Cart::content()->count()))
+                    @if (!empty(Auth::check()))
+                        @if (!empty(Cart::content()->count()))
 
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <div class="dropdown-cart-products">
-                                @foreach (Cart::content() as $header_cart)
-                                    @php
-                                        $getCartProduct = App\Models\Product::getSingle($header_cart->id);
-                                    @endphp
-                                    @if (!empty($getCartProduct))
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-cart-products">
+                                    @foreach (Cart::content() as $header_cart)
                                         @php
-                                            $getProductImage = $getCartProduct->getImageSingle($getCartProduct->id);
+                                            $getCartProduct = App\Models\Product::getSingle($header_cart->id);
                                         @endphp
+                                        @if (!empty($getCartProduct))
+                                            @php
+                                                $getProductImage = $getCartProduct->getImageSingle($getCartProduct->id);
+                                            @endphp
 
-                                        <div class="product">
-                                            <div class="product-cart-details">
-                                                <h4 class="product-title">
-                                                    <a
-                                                        href="{{ url($getCartProduct->slug) }}">{{ $getCartProduct->title }}</a>
-                                                </h4>
+                                            <div class="product">
+                                                <div class="product-cart-details">
+                                                    <h4 class="product-title">
+                                                        <a
+                                                            href="{{ url($getCartProduct->slug) }}">{{ $getCartProduct->title }}</a>
+                                                    </h4>
 
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty">{{ $header_cart->qty }}</span>
-                                                    x ${{ number_format($header_cart->price, 2) }}
-                                                </span>
-                                            </div><!-- End .product-cart-details -->
+                                                    <span class="cart-product-info">
+                                                        <span class="cart-product-qty">{{ $header_cart->qty }}</span>
+                                                        x ${{ number_format($header_cart->price, 2) }}
+                                                    </span>
+                                                </div><!-- End .product-cart-details -->
 
-                                            <figure class="product-image-container">
-                                                <a href="product.html" class="product-image">
-                                                    <img src="{{ $getProductImage->getLogo() }}" alt="product">
-                                                </a>
-                                            </figure>
-                                            <a href="{{ url('cart/delete/' . $header_cart->rowId) }}"
-                                                class="btn-remove" title="Remove Product"><i
-                                                    class="icon-close"></i></a>
-                                        </div><!-- End .product -->
-                                    @endif
-                                @endforeach
+                                                <figure class="product-image-container">
+                                                    <a href="product.html" class="product-image">
+                                                        <img src="{{ $getProductImage->getLogo() }}" alt="product">
+                                                    </a>
+                                                </figure>
+                                                <a href="{{ url('cart/delete/' . $header_cart->rowId) }}"
+                                                    class="btn-remove" title="Remove Product"><i
+                                                        class="icon-close"></i></a>
+                                            </div><!-- End .product -->
+                                        @endif
+                                    @endforeach
 
-                            </div><!-- End .cart-product -->
+                                </div><!-- End .cart-product -->
 
-                            <div class="dropdown-cart-total">
-                                <span>Total</span>
+                                <div class="dropdown-cart-total">
+                                    <span>Total</span>
 
-                                <span class="cart-total-price">${{ Cart::subtotal() }}</span>
-                            </div><!-- End .dropdown-cart-total -->
+                                    <span class="cart-total-price">${{ Cart::subtotal() }}</span>
+                                </div><!-- End .dropdown-cart-total -->
 
-                            <div class="dropdown-cart-action">
-                                <a href="{{ url('cart') }}" class="btn btn-primary">View Cart</a>
-                                <a href="{{ url('checkout') }}"
-                                    class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .dropdown-cart-total -->
-                        </div><!-- End .dropdown-menu -->
+                                <div class="dropdown-cart-action">
+                                    <a href="{{ url('cart') }}" class="btn btn-primary">View Cart</a>
+                                    <a href="{{ url('checkout') }}"
+                                        class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                            class="icon-long-arrow-right"></i></a>
+                                </div><!-- End .dropdown-cart-total -->
+                            </div><!-- End .dropdown-menu -->
+                        @endif
                     @endif
 
                 </div><!-- End .cart-dropdown -->

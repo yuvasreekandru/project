@@ -171,8 +171,12 @@
                     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
+                        <?php if(!empty(Auth::check())): ?>
                         <span class="cart-count"><?php echo e(Cart::content()->count()); ?></span>
+                        <?php endif; ?>
                     </a>
+                    <?php if(!empty(Auth::check())): ?>
+
                     <?php if(!empty(Cart::content()->count())): ?>
 
                         <div class="dropdown-menu dropdown-menu-right">
@@ -227,6 +231,7 @@
                                         class="icon-long-arrow-right"></i></a>
                             </div><!-- End .dropdown-cart-total -->
                         </div><!-- End .dropdown-menu -->
+                    <?php endif; ?>
                     <?php endif; ?>
 
                 </div><!-- End .cart-dropdown -->
