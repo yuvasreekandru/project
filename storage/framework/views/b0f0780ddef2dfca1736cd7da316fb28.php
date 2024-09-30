@@ -411,6 +411,7 @@
             else
             {
                 var total = parseFloat(price);
+                $('#oldPrice').show();
                 $('#getTotalPrice').html(total.toFixed(2));
             }
 

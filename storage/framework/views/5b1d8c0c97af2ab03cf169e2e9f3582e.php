@@ -172,66 +172,65 @@
                         aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
                         <?php if(!empty(Auth::check())): ?>
-                        <span class="cart-count"><?php echo e(Cart::content()->count()); ?></span>
+                            <span class="cart-count"><?php echo e(Cart::content()->count()); ?></span>
                         <?php endif; ?>
                     </a>
                     <?php if(!empty(Auth::check())): ?>
+                        <?php if(!empty(Cart::content()->count())): ?>
 
-                    <?php if(!empty(Cart::content()->count())): ?>
-
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <div class="dropdown-cart-products">
-                                <?php $__currentLoopData = Cart::content(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $header_cart): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php
-                                        $getCartProduct = App\Models\Product::getSingle($header_cart->id);
-                                    ?>
-                                    <?php if(!empty($getCartProduct)): ?>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-cart-products">
+                                    <?php $__currentLoopData = Cart::content(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $header_cart): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php
-                                            $getProductImage = $getCartProduct->getImageSingle($getCartProduct->id);
+                                            $getCartProduct = App\Models\Product::getSingle($header_cart->id);
                                         ?>
+                                        <?php if(!empty($getCartProduct)): ?>
+                                            <?php
+                                                $getProductImage = $getCartProduct->getImageSingle($getCartProduct->id);
+                                            ?>
 
-                                        <div class="product">
-                                            <div class="product-cart-details">
-                                                <h4 class="product-title">
-                                                    <a
-                                                        href="<?php echo e(url($getCartProduct->slug)); ?>"><?php echo e($getCartProduct->title); ?></a>
-                                                </h4>
+                                            <div class="product">
+                                                <div class="product-cart-details">
+                                                    <h4 class="product-title">
+                                                        <a
+                                                            href="<?php echo e(url($getCartProduct->slug)); ?>"><?php echo e($getCartProduct->title); ?></a>
+                                                    </h4>
 
-                                                <span class="cart-product-info">
-                                                    <span class="cart-product-qty"><?php echo e($header_cart->qty); ?></span>
-                                                    x $<?php echo e(number_format($header_cart->price, 2)); ?>
+                                                    <span class="cart-product-info">
+                                                        <span class="cart-product-qty"><?php echo e($header_cart->qty); ?></span>
+                                                        x $<?php echo e(number_format($header_cart->price, 2)); ?>
 
-                                                </span>
-                                            </div><!-- End .product-cart-details -->
+                                                    </span>
+                                                </div><!-- End .product-cart-details -->
 
-                                            <figure class="product-image-container">
-                                                <a href="product.html" class="product-image">
-                                                    <img src="<?php echo e($getProductImage->getLogo()); ?>" alt="product">
-                                                </a>
-                                            </figure>
-                                            <a href="<?php echo e(url('cart/delete/' . $header_cart->rowId)); ?>"
-                                                class="btn-remove" title="Remove Product"><i
-                                                    class="icon-close"></i></a>
-                                        </div><!-- End .product -->
-                                    <?php endif; ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <figure class="product-image-container">
+                                                    <a href="product.html" class="product-image">
+                                                        <img src="<?php echo e($getProductImage->getLogo()); ?>" alt="product">
+                                                    </a>
+                                                </figure>
+                                                <a href="<?php echo e(url('cart/delete/' . $header_cart->rowId)); ?>"
+                                                    class="btn-remove" title="Remove Product"><i
+                                                        class="icon-close"></i></a>
+                                            </div><!-- End .product -->
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                            </div><!-- End .cart-product -->
+                                </div><!-- End .cart-product -->
 
-                            <div class="dropdown-cart-total">
-                                <span>Total</span>
+                                <div class="dropdown-cart-total">
+                                    <span>Total</span>
 
-                                <span class="cart-total-price">$<?php echo e(Cart::subtotal()); ?></span>
-                            </div><!-- End .dropdown-cart-total -->
+                                    <span class="cart-total-price">$<?php echo e(Cart::subtotal()); ?></span>
+                                </div><!-- End .dropdown-cart-total -->
 
-                            <div class="dropdown-cart-action">
-                                <a href="<?php echo e(url('cart')); ?>" class="btn btn-primary">View Cart</a>
-                                <a href="<?php echo e(url('checkout')); ?>"
-                                    class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                        class="icon-long-arrow-right"></i></a>
-                            </div><!-- End .dropdown-cart-total -->
-                        </div><!-- End .dropdown-menu -->
-                    <?php endif; ?>
+                                <div class="dropdown-cart-action">
+                                    <a href="<?php echo e(url('cart')); ?>" class="btn btn-primary">View Cart</a>
+                                    <a href="<?php echo e(url('checkout')); ?>"
+                                        class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                            class="icon-long-arrow-right"></i></a>
+                                </div><!-- End .dropdown-cart-total -->
+                            </div><!-- End .dropdown-menu -->
+                        <?php endif; ?>
                     <?php endif; ?>
 
                 </div><!-- End .cart-dropdown -->
